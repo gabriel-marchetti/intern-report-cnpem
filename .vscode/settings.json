@@ -1,0 +1,28 @@
+{
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "LuaLaTeX (latexmk)",
+            "tools": ["latexmk-lualatex"]
+        }
+    ],
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk-lualatex",
+            "command": "latexmk",
+            "args": [
+                "-lualatex",
+                "-shell-escape",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-halt-on-error",
+                "%DOC%"
+            ]
+        }
+    ],
+    "latex-workshop.latex.recipe.default": "first",
+    "latex-workshop.latex.autoBuild.run": "onSave",
+    "latex-workshop.view.pdf.viewer": "tab",
+    "latex-workshop.view.pdf.tab.editorGroup": "right",
+    "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click"
+}
