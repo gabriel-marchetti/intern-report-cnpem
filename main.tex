@@ -1,4 +1,3 @@
-% !TeX program = lualatex
 % !TeX root = main.tex
 % Template de Relatório de Estágio - Normas ABNT
 \documentclass[12pt,a4paper]{article}
@@ -10,7 +9,10 @@
 \usepackage{geometry}
 \usepackage{setspace}
 \usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{fancyvrb}
 \usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
 \usepackage[hidelinks,hypertexnames=false]{hyperref}
 \usepackage{titlesec}
 \usepackage{tocloft}
@@ -68,6 +70,15 @@
 % Sumário
 \renewcommand{\contentsname}{Sumário}
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+% Registra nomes e destinos dos títulos sem numeração para \nameref.
+\makeatletter
+\newcommand{\rotulosecao}[2]{%
+    \phantomsection
+    \def\@currentlabelname{#2}%
+    \label{#1}%
+}
+\makeatother
 
 % Início do documento
 \begin{document}
@@ -162,6 +173,7 @@
 
 \phantomsection
 \section*{Introdução}
+\rotulosecao{sec:introducao}{Introdução}
 \addcontentsline{toc}{section}{Introdução}
 
 As linhas de luz síncrotron são estações experimentais que utilizam a radiação síncrotron para realizar investigações científicas em diversas áreas do conhecimento, como biologia, química, ciência dos materiais e geociências \cite{xiao_chao_1}. 
@@ -186,6 +198,7 @@ Essa variação na necessidade de foco implica que a linha de luz deve ser capaz
 \newpage
 \phantomsection
 \section*{Objetivo}
+\rotulosecao{sec:objetivo}{Objetivo}
 \addcontentsline{toc}{section}{Objetivo}
 
 O problema abordado nesse projeto envolve a caracterização e estudo de um método de cáustica para a linha de luz \CNB. 
@@ -203,10 +216,12 @@ O resultado pretendido dentro desse projeto é um plano de cáustica que capte o
 \newpage
 \phantomsection
 \section*{Método}
+\rotulosecao{sec:metodo}{Método}
 \addcontentsline{toc}{section}{Método}
 
 \phantomsection
 \subsection*{Descrição dos fenômenos observados.}
+\rotulosecao{sec:fenomenos-observados}{Descrição dos fenômenos observados.}
 \addcontentsline{toc}{subsection}{Descrição dos fenômenos observados.}
 
 Raios-X são radiações eletromagnéticas de alta energia, capazes de atravessar materiais opacos à luz visível. Eles possuem comprimentos de onda muito curtos, geralmente na faixa de 0,01 a 10 nanômetros, o que lhes confere grande poder de penetração e capacidade de interação com a matéria em nível atômico.
@@ -322,6 +337,7 @@ contudo não entramos em maiores detalhes, pois vários experimentos utilizar o 
 
 \phantomsection
 \subsection*{Descrição da linha de luz}
+\rotulosecao{sec:linha-de-luz}{Descrição da linha de luz}
 \addcontentsline{toc}{subsection}{Descrição da linha de luz}
 
 Diferente de dispositivos de espectroscopia de luz visível, infra-vermelho e micro-ondas, não há um aparato comercial que consiga reproduzir de forma completa os experimentos de espectroscopia de absorção de raios-X.
@@ -402,7 +418,8 @@ Desse modo, a óptica prepara a energia e a distribuição espacial da radiaçã
 
 \phantomsection
 \subsection*{Descrição das estações experimentais}
-\addcontentsline{toc}{subsection}{descrição das estações experimentais}
+\rotulosecao{sec:estacoes-experimentais}{Descrição das estações experimentais}
+\addcontentsline{toc}{subsection}{Descrição das estações experimentais}
 
 Dentro da linha de luz \CNB\ existem duas estações experimentais, sendo elas a TARUMÃ e a SAPOTI. 
 A primeira providencia um tamanho de feixe submicrométrico e ambiente de amostras variável, enquanto a SAPOTI possui tamanho de feixe nanométrico e ambiente de amostras criogênico e de ultra-alto vácuo.
@@ -450,13 +467,541 @@ A posição dos fotodiodos e o envio dos sinais para aquisição e armazenamento
 
 \phantomsection
 \subsection*{Descrição do processamento dos dados experimentais}
-\addcontentsline{toc}{subsection}{descrição do processamento dos dados experimentais}
+\rotulosecao{sec:processamento-dados}{Descrição do processamento dos dados experimentais}
+\addcontentsline{toc}{subsection}{Descrição do processamento dos dados experimentais}
 
-A linha de luz \CNB\ é controlada por um sistema \textbf{EPICS} (\textit{Experimental Physics and Industrial Control System}) que contempla um conjunto de ferramentas \textit{Open-Source} para criação de sistemas distribuídos para controle em tempo real dos instrumentos científicos. \cite{national_Instruments}.
+A linha de luz \CNB\ é controlada por um sistema \textbf{EPICS} (\textit{Experimental Physics and Industrial Control System}) que contempla um conjunto de ferramentas \textit{Open-Source} para criação de sistemas distribuídos para controle em tempo real dos instrumentos científicos. \cite{national_instruments}.
+Se trata de um sistema utilizado para controle de instalações científicas de grande escala sobre uma rede, isso é especialmente interessante em uma linha de raios-X, 
+pois pode haver movimentação remota durante a execução dos experimentos, uma vez que um sistema manual demandaria interromper o fluxo de raios-X na amostra para movimentação dos motores ou posicionamento de detectores.
 
-\newpage
+Se trata de um sistema de alto tráfico dentro da rede, com uma interface que oferece \textit{Channel Access} (CA) para controle do estado do sistema, que utilizam comunicação TCP/IP e abstraem questões como tamanho de pacotes e rajadas de pacotes.
+
+Para uma instalação científica que possui diversos dispositivos é necessário osquestrar a rede de uma maneira racional, portanto, alguns mecanismos de comunicação são seguidos como delimitação da taxa de atualização de uma \textit{Process Variable} (PV), que se trata de uma variável de controle do sistema EPICS  
+como um posicionamento de um motor ou temperatura de um porta-amostras, ou ainda o monitoramento por eventos através de \textit{subscriptions}, ou seja, um cliente assina uma \textbf{PV} e recebe notificações conforme eventos configurados, evitando a consulta periódica através de \textit{polling}.
+
+Como citado no trecho anterior, a palavra cliente também mostra outra questão importante da arquitetura do sistema \textbf{EPICS}. A comunicação através do \textit{Channel Access} funciona como um sistema cliente-servidor, em que os servidores disponibilizam as \textbf{PVs} e os clientes acessam essas variáveis para leitura, escrita ou monitoramento. Um servidor pode atender diversos clientes, assim como um cliente pode acessar variáveis disponibilizadas por diferentes servidores \cite{epics_arquitetura}.
+
+Podemos entender essa organização pensando no posicionamento de um motor. O \textit{Input/Output Controller} (IOC), ou controlador de entrada e saída, executa o software responsável pela comunicação com o dispositivo e disponibiliza suas variáveis através de um servidor \textit{Channel Access}. O cliente pode ser uma interface de operação que permite consultar a posição do motor e solicitar uma nova posição através da escrita na PV correspondente. O IOC recebe essa solicitação e, de acordo com a lógica de controle implementada, atua sobre o dispositivo.
+
+A Figura~\ref{fig:epics_diagram} ilustra essa organização, mostrando um IOC e outros servidores conectados à mesma rede que os clientes. A interface de operação representa um desses clientes, mas programas de aquisição e monitoramento também podem exercer essa função. Veja que essa distribuição permite acessar diferentes instrumentos pela rede, sem que cada interface precise implementar diretamente a comunicação com os dispositivos.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\linewidth]{imagens/EPICS_DIAGRAM_corrigido.png}
+    \caption{Arquitetura cliente-servidor do EPICS através do protocolo \textit{Channel Access}. O IOC e os demais servidores disponibilizam variáveis de processo pela rede, enquanto a interface de operação e os outros clientes acessam essas variáveis para leitura, escrita e monitoramento. As setas duplas indicam a comunicação bidirecional. Imagem extraída de \cite{national_instruments}.}
+    \label{fig:epics_diagram}
+\end{figure}
+
+
+
+
+\phantomsection
+\subsection*{Framework Bluesky e integração com a análise de dados}
+\rotulosecao{sec:bluesky}{Framework Bluesky e integração com a análise de dados}
+\addcontentsline{toc}{subsection}{Framework Bluesky e integração com a análise de dados}
+
+O \textit{Bluesky} é um \textit{framework} de código aberto desenvolvido em Python para descrever procedimentos experimentais, coordenar sua execução e adquirir dados acompanhados de metadados. Seu ecossistema reúne bibliotecas que conectam a operação dos instrumentos ao armazenamento e ao processamento científico. Essa organização permite reutilizar procedimentos, acompanhar as medidas durante sua aquisição e registrar informações que auxiliam a comparação e a reprodutibilidade dos experimentos \cite{bluesky_framework}.
+
+Na arquitetura apresentada anteriormente, o EPICS constitui a camada de controle que disponibiliza as variáveis de processo dos dispositivos através dos IOCs. O Bluesky atua em um nível superior, organizando a sequência de ações necessária para realizar uma medida. Por exemplo, um procedimento pode solicitar o deslocamento de um motor, aguardar sua conclusão, disparar um detector e registrar os valores obtidos. A comunicação com o EPICS ocorre por meio de objetos que representam os instrumentos em Python, geralmente implementados com a biblioteca \textit{Ophyd}. Assim, a lógica experimental pode ser escrita a partir das funções dos dispositivos, sem repetir em cada procedimento os detalhes de acesso às suas PVs \cite{ophyd_documentacao}.
+
+A Figura~\ref{fig:bluesky-arquitetura} apresenta essa integração, desde o controle do hardware até a análise interativa. O fluxo de documentos permite encaminhar os dados tanto para visualização durante a aquisição quanto para armazenamento e processamento posterior.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{imagens/bluesky-arquitetura.png}
+    \caption{Organização do ecossistema Bluesky: execução dos procedimentos pelo Run Engine, abstração dos dispositivos com Ophyd, serialização com Suitcase e integração com ferramentas de visualização e análise de dados. O diagrama apresenta Databroker/Intake como camada de acesso aos dados armazenados. Fonte: \cite{bluesky_diagrama}.}
+    \label{fig:bluesky-arquitetura}
+\end{figure}
+
+O \textbf{Run Engine} é o componente do Bluesky responsável por executar os planos experimentais, escritos como geradores Python que produzem mensagens descrevendo as ações desejadas. Ele interpreta essas mensagens, coordena as operações e as esperas necessárias e emite documentos com os dados e metadados da execução. Esses documentos podem ser recebidos por funções de acompanhamento, chamadas \textit{callbacks}, para produzir gráficos ou encaminhar os registros ao armazenamento. O Run Engine também oferece mecanismos de pausa e retomada, conforme as condições do plano, facilitando o tratamento de interrupções \cite{bluesky_framework}.
+
+O \textbf{Ophyd} fornece a camada de abstração dos dispositivos. Sinais individuais, como PVs de posição e de aquisição, podem ser agrupados em objetos que representam motores ou detectores. Esses objetos oferecem interfaces padronizadas para operações como ajustar um valor, disparar uma aquisição e ler resultados, por meio de métodos como \texttt{set()}, \texttt{trigger()} e \texttt{read()}. Embora sua integração com EPICS seja frequente, essa abstração também pode representar outros sistemas de controle \cite{ophyd_documentacao}.
+
+O \textbf{Suitcase} reúne ferramentas de serialização que convertem os documentos produzidos pelo Bluesky em formatos de arquivo, conforme o pacote de exportação utilizado. A exportação pode ocorrer durante a aquisição ou a partir de documentos recuperados posteriormente. Sua função é preparar os registros para persistência e intercâmbio com outros programas. Como indicado na figura, detectores que produzem grandes volumes de dados também podem gravar diretamente no armazenamento, enquanto o fluxo de aquisição mantém as informações necessárias para associar esses arquivos ao experimento \cite{suitcase_documentacao,bluesky_diagrama}.
+
+A relação com as ferramentas de análise ocorre tanto durante quanto após a medida. Durante a aquisição, os documentos podem alimentar rotinas de visualização e redução de dados, oferecendo retorno ao operador sobre o andamento do experimento. Posteriormente, os registros armazenados podem ser recuperados para análise em ambientes como Jupyter, utilizando NumPy para operações com arranjos, SciPy para ajustes e processamento numérico e Matplotlib para visualização \cite{bluesky_framework}. O diagrama representa o acesso aos dados por Databroker/Intake; na documentação atual, Tiled com os \textit{Bluesky Tiled Plugins} é indicado para novas instalações, enquanto Databroker atende também à compatibilidade com sistemas existentes \cite{databroker_documentacao}.
+
+Para o método de cáustica proposto neste trabalho, essa estrutura permite organizar um plano que percorra diferentes posições e associe cada leitura dos detectores às condições de aquisição. Os valores de $I_0$ e $I_1$ podem então ser utilizados no cálculo da absorção, conforme a Equação~\ref{eq:absorption-beer-lambert}, e na formação dos mapas utilizados para caracterizar o feixe. Dessa forma, o procedimento de aquisição e as rotinas de análise podem ser desenvolvidos de maneira articulada, preservando a identificação das medidas e os parâmetros necessários à interpretação dos resultados.
+
+\phantomsection
+\subsection*{Como o método de cáustica funciona}
+\rotulosecao{sec:metodo-caustica}{Como o método de cáustica funciona}
+\addcontentsline{toc}{subsection}{Como o método de cáustica funciona}
+
+Como referenciado na seção "\nameref{sec:processamento-dados}"\ o sistema \textbf{EPICS} aliado ao framework Bluesky é utilizado para criar planos para executar experimentos como os discutidos em "\nameref{sec:fenomenos-observados}".
+
+Dessa maneira, uma abstração simples, porém útil, para entender os experimentos envolve pensar em uma série de movimentações para uma posição desejada, ativar os detectores para que eles captem os sinais de forma adequada e salvar os dados. 
+Após uma execução desse passo, o próximo passo é executado e assim por diante até o final de execução do plano.
+
+A Figura~\ref{fig:abstracao-plano} representa essa sequência para uma varredura ponto a ponto. O plano descreve as ações, enquanto o Run Engine coordena sua execução sobre os dispositivos representados pelo Ophyd. As etapas de espera garantem que a movimentação e a aquisição sejam concluídas antes da leitura correspondente. O registro dos dados gera documentos que podem ser encaminhados às rotinas de armazenamento e análise.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[x=1cm,y=1cm,>=stealth,font=\small,
+        etapa/.style={draw,rounded corners,fill=blue!6,minimum width=8.0cm,minimum height=0.85cm,align=center},
+        terminal/.style={draw,rounded corners=12pt,fill=gray!12,minimum width=4.3cm,minimum height=0.8cm,align=center},
+        decisao/.style={draw,diamond,aspect=3.4,fill=orange!10,inner sep=2pt,align=center}]
+        \node[terminal] (inicio) at (0,0) {Iniciar o plano e abrir a execução};
+        \node[etapa] (selecionar) at (0,-1.25) {Selecionar a próxima posição};
+        \node[etapa] (mover) at (0,-2.5) {Mover os motores e aguardar a conclusão};
+        \node[etapa] (adquirir) at (0,-3.75) {Disparar os detectores e aguardar a aquisição};
+        \node[etapa] (ler) at (0,-5) {Ler posições e sinais ($I_0$, $I_1$)\\e emitir o registro da medida};
+        \node[decisao] (repetir) at (0,-6.55) {Há mais posições?};
+        \node[terminal] (fim) at (0,-8.15) {Encerrar a execução do plano};
+        \draw[->,thick] (inicio) -- (selecionar);
+        \draw[->,thick] (selecionar) -- (mover);
+        \draw[->,thick] (mover) -- (adquirir);
+        \draw[->,thick] (adquirir) -- (ler);
+        \draw[->,thick] (ler) -- (repetir);
+        \draw[->,thick] (repetir) -- node[right] {Não} (fim);
+        \draw[->,thick] (repetir.east) -- node[above] {Sim} (5,-6.55)
+            -- (5,-1.25) -- (selecionar.east);
+        \node[draw,fill=gray!7,align=center,text width=3.1cm,inner sep=7pt] (dados) at (-7,-5) {Documentos\\$\downarrow$\\Armazenamento\\e análise};
+        \draw[->,thick,dashed] (ler.west) -- (dados.east);
+    \end{tikzpicture}
+    \caption{Abstração de um plano de aquisição ponto a ponto: a sequência de movimentação, aquisição e registro é repetida para cada posição programada. O fluxo representa a lógica experimental executada pelo Run Engine; a persistência dos documentos depende das rotinas de armazenamento conectadas. Elaboração própria.}
+    \label{fig:abstracao-plano}
+\end{figure}
+
+Dessa forma, podemos entender o plano de cáustica como um plano para modificar o estado da linha a fim de atingir o melhor foco possível.
+O primeiro passo, portanto, é definir quais são os motores de movimentação e quais são os detectores relevantes para sua execução.
+
+Dentro da linha de luz \CNB\ há motores especialmente interessantes para a execução da cáustica. Podemos começar pela movimentação do \texttt{SAMPLE\_STAGE}, que permite posicionar a amostra nos eixos X, Y e Z. A movimentação em Z é especialmente interessante, pois permite aproximar ou afastar a amostra da região de foco do feixe. Dessa forma, é possível realizar medidas em diferentes posições ao longo dessa região e observar como o perfil do feixe varia, como representado na Figura~\ref{fig:sample-stage-foco}.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[x=1cm,y=1cm,>=stealth,font=\small]
+        % Vista esquemática longitudinal da estação experimental.
+        \node[draw,fill=gray!15,minimum width=1.9cm,minimum height=1.6cm,align=center] at (0,0) {Óptica de\\focalização\\(KB)};
+        \fill[blue!12] (1.05,0.7) -- (6,0) -- (10.5,0.6) -- (10.5,-0.6) -- (6,0) -- (1.05,-0.7) -- cycle;
+        \draw[blue!65!black] (1.05,0.7) -- (6,0) -- (10.5,0.6);
+        \draw[blue!65!black] (1.05,-0.7) -- (6,0) -- (10.5,-0.6);
+        \draw[->,blue!70!black,thick] (1.1,0) -- (10.8,0);
+        \node[above,blue!70!black] at (3,0.8) {Feixe de raios-X};
+        \fill (6,0) circle (2pt);
+        \node[above] at (6,0.85) {Região de foco};
+        \draw[dashed,gray,thick] (4.2,-0.95) -- (4.2,0.95);
+        \draw[orange!85!black,very thick] (7.5,-0.95) -- (7.5,0.95);
+        \node[below,align=center] at (4.2,-1.05) {Amostra na\\posição inicial};
+        \node[below,align=center] at (8,-1.05) {Amostra após\\deslocamento};
+        \draw[<->,thick] (4.2,-2.55) -- node[above] {Varredura longitudinal} (7.5,-2.55);
+        \node[draw,fill=gray!10,minimum width=4.4cm,minimum height=0.65cm] at (5.85,-3.2) {\texttt{SAMPLE\_STAGE}};
+        \draw[->,thick] (0.6,-2.6) -- (2.1,-2.6) node[right] {Z};
+        \draw[->,thick] (0.6,-2.6) -- (0.6,-1.5) node[above] {Y};
+        \draw[->,thick] (0.6,-2.6) -- (1.35,-2.0) node[right] {X};
+    \end{tikzpicture}
+    \caption{Contexto da movimentação longitudinal da amostra na estação experimental da linha \CNB. A amostra é deslocada em relação à região de foco produzida pela óptica KB. Os eixos estão representados apenas para orientação esquemática, sem indicar a geometria mecânica ou a escala real da estação. Elaboração própria a partir da descrição do sistema.}
+    \label{fig:sample-stage-foco}
+\end{figure}
+
+Contudo, essa cinemática não é ideal. Uma movimentação em Z provoca também movimentos parasitas em X e em Y, de forma que a região da amostra atingida pelo feixe pode mudar durante o deslocamento. Veja que isso é uma questão importante para a cáustica, pois uma alteração no sinal pode estar associada tanto à variação do perfil do feixe quanto à mudança da região observada na amostra. Dessa forma, é necessário considerar esses movimentos ao comparar as medidas realizadas em diferentes posições.
+
+Para realizar esse ajuste, há um eixo cinemático virtual conhecido como \textit{Beam Axis}. Esse eixo combina uma movimentação grossa de posicionamento em Z com ajustes em X e em Y, de forma que a amostra continue sendo atingida na mesma região. Podemos entender esse eixo como um comando de movimentação que coordena os três eixos físicos do \texttt{SAMPLE\_STAGE}, como ilustrado na Figura~\ref{fig:beam-axis-compensacao}.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[x=1cm,y=1cm,>=stealth,font=\small]
+        \node[align=center,font=\small\bfseries] at (0,2.55) {(a) Movimento apenas em Z};
+        \node[align=center,font=\small\bfseries] at (7,2.55) {(b) Movimento pelo Beam Axis};
+        % Seções transversais: o feixe fica fixo e a região de interesse se desloca.
+        \foreach \cx in {0,7} {
+            \draw[gray,dashed] (\cx-1.25,-1.25) rectangle (\cx+1.25,1.25);
+            \draw[->,gray] (\cx-1.8,0) -- (\cx+1.9,0) node[right,black] {X};
+            \draw[->,gray] (\cx,-1.55) -- (\cx,1.65) node[above,black] {Y};
+            \draw[blue!70!black,thick] (\cx,0) circle (0.18);
+            \fill[blue!70!black] (\cx,0) circle (1.5pt);
+        }
+        \draw[orange!85!black,thick] (-0.45,-0.7) rectangle (2.05,1.8);
+        \fill[orange!85!black] (0.8,0.55) circle (3pt);
+        \draw[->,orange!85!black,thick] (0.22,0.15) -- (0.69,0.48);
+        \node[align=center] at (0,-2.15) {A região de interesse se desloca\\em X e Y e deixa o centro do feixe.};
+        \draw[orange!85!black,thick] (5.75,-1.25) rectangle (8.25,1.25);
+        \fill[orange!85!black] (7,0) circle (3pt);
+        \draw[blue!70!black,thick] (7,0) circle (0.18);
+        \node[align=center] at (7,-2.15) {Os ajustes em X e Y mantêm\\a região de interesse sobre o feixe.};
+        \draw[dashed,gray] (-1.7,-3.1) -- (-0.9,-3.1);
+        \node[right] at (-0.8,-3.1) {Posição inicial da amostra};
+        \draw[orange!85!black,thick] (5.1,-3.1) -- (5.9,-3.1);
+        \node[right] at (6,-3.1) {Posição após o movimento};
+        \node[align=center] at (3.5,-3.8) {Vista transversal ao feixe; o deslocamento em Z ocorre perpendicularmente ao desenho.};
+        \node[draw,rounded corners,fill=blue!6,align=center,minimum width=4.1cm,minimum height=0.9cm] (virtual) at (0,-5.15) {Comando virtual\\\textit{Beam Axis}};
+        \node[draw,rounded corners,fill=gray!10,align=center,minimum width=5.1cm,minimum height=0.9cm] (fisicos) at (7,-5.15) {Movimento em Z\\e compensações em X e Y};
+        \draw[->,thick] (virtual.east) -- (fisicos.west);
+    \end{tikzpicture}
+    \caption{Comparação entre o deslocamento apenas em Z e a movimentação coordenada pelo Beam Axis. O círculo azul representa a posição do feixe e o ponto laranja identifica a mesma região material da amostra. Em (a), os movimentos parasitas afastam essa região do feixe; em (b), os ajustes transversais compensam esse deslocamento. Os sentidos e as amplitudes desenhados são ilustrativos. Elaboração própria a partir da descrição do sistema.}
+    \label{fig:beam-axis-compensacao}
+\end{figure}
+
+Dessa forma, o uso do \textit{Beam Axis} permite organizar a varredura longitudinal da cáustica mantendo como referência a mesma região da amostra. A movimentação em Z altera sua posição em relação ao foco, enquanto os ajustes em X e em Y compensam o deslocamento transversal provocado pela cinemática. Essa organização é especialmente interessante para que as diferenças entre as medidas possam ser relacionadas à caracterização do feixe.
+
+
+
+
+
+Além da movimentação da amostra, há os motores associados aos espelhos de focalização. Como apresentado na seção "\nameref{sec:linha-de-luz}", o arranjo KB possui um espelho responsável pela focalização vertical e outro pela horizontal \cite{lnlscarnaubaoptica}. Esses espelhos são chamados, respectivamente, de VFM (\textit{Vertical Focusing Mirror}) e HFM (\textit{Horizontal Focusing Mirror}) como já apresentados anteriormente. Seu ajuste é especialmente interessante para a cáustica, pois permite observar como diferentes condições de alinhamento da óptica afetam o feixe na região da amostra.
+
+O VFM possui uma movimentação de rotação em torno do eixo X, chamada de Rx. Essa movimentação pode ser realizada através de dois motores com escalas de ajuste diferentes. O primeiro realiza uma movimentação mais grossa e menos precisa, que será chamada neste trabalho de \textbf{otimização brusca do VFM}. O segundo permite uma movimentação fina e pode ser chamado de \textbf{otimização fina do VFM}, sendo utilizado para realizar ajustes menores na orientação do espelho. Veja que ambos estão associados ao ajuste de Rx do VFM, mas permitem trabalhar em escalas diferentes de movimentação.
+
+Dessa forma, podemos pensar em uma sequência de ajuste na qual a otimização brusca aproxima o espelho de uma condição de interesse e a movimentação fina permite investigar a região próxima dessa condição. Essa sequência é uma possibilidade para organizar o procedimento, sendo necessário avaliar o resultado através das medidas do feixe. Para o HFM, há apenas um esquema de movimentação considerado neste trabalho, associado à rotação em torno do eixo Y, chamada de Ry.
+
+Uma rotação do espelho modifica a direção de reflexão dos raios-X e, portanto, pode alterar a posição de incidência do feixe no plano da amostra. Para o VFM, a rotação Rx está associada ao ajuste no plano vertical YZ; para o HFM, a rotação Ry está associada ao ajuste no plano horizontal XZ. A Figura~\ref{fig:kb-rotacoes-feixe} mostra esse efeito de maneira simplificada, utilizando duas projeções para separar as movimentações. A movimentação fina do VFM atua sobre a mesma coordenada angular que a otimização brusca, permitindo investigar variações menores ao redor do ajuste escolhido.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[x=1cm,y=1cm,>=stealth,font=\small]
+        \foreach \base/\titulo/\eixo/\rot in {0/{(a) VFM: projeção no plano YZ}/Y/Rx,-4.4/{(b) HFM: projeção no plano XZ}/X/Ry} {
+            \begin{scope}[shift={(0,\base)}]
+                \node[font=\small\bfseries] at (5,1.65) {\titulo};
+                \draw[->,blue!70!black,thick] (0,0) -- (2.8,0);
+                \node[above,align=center] at (1.1,0.1) {Feixe\\incidente};
+                \draw[gray,very thick] (2.2,-0.22) -- (3.8,0.22);
+                \draw[orange!85!black,very thick] (2.2,-0.4) -- (3.8,0.4);
+                \draw[->,thick] (4,0.05) arc[start angle=0,end angle=38,radius=1];
+                \node[right] at (4.05,0.65) {\rot};
+                \draw[blue!70!black,thick] (3,0) -- (9,0.42);
+                \draw[orange!85!black,thick] (3,0) -- (9,1.1);
+                \draw[thick] (9,-0.3) -- (9,1.4);
+                \fill[blue!70!black] (9,0.42) circle (2pt);
+                \fill[orange!85!black] (9,1.1) circle (2pt);
+                \draw[<->] (9.45,0.42) -- (9.45,1.1);
+                \node[right,align=left] at (9.65,0.75) {Variação\\em \eixo};
+                \node[below] at (9,-0.4) {Plano da amostra};
+                \node[below,align=center] at (4.5,-0.65) {Espelho antes e após\\o ajuste angular};
+                \draw[->] (0,-1.4) -- (1.4,-1.4) node[below] {Z};
+                \draw[->] (0,-1.4) -- (0,-0.55) node[above] {\eixo};
+            \end{scope}
+        }
+        \draw[blue!70!black,thick] (1,-6.45) -- (1.8,-6.45);
+        \node[right] at (1.9,-6.45) {Trajetória de referência};
+        \draw[orange!85!black,thick] (6.4,-6.45) -- (7.2,-6.45);
+        \node[right] at (7.3,-6.45) {Após ajuste angular};
+    \end{tikzpicture}
+    \caption{Efeito qualitativo de uma variação angular dos espelhos sobre a trajetória do feixe até a amostra. Em (a), Rx do VFM atua no plano vertical YZ; em (b), Ry do HFM atua no plano horizontal XZ. Na segunda projeção, X é desenhado para cima para permitir a visualização do plano horizontal. Os ângulos são exagerados e os sentidos são ilustrativos, sem representar o sinal positivo dos motores ou a geometria real da reflexão rasante. Elaboração própria.}
+    \label{fig:kb-rotacoes-feixe}
+\end{figure}
+
+Contudo, uma mudança na posição de incidência do feixe não indica, por si só, uma melhora da focalização, esse efeito ocorre por conta de uma variação do ângulo de incidência sobre uma superfície curva, modificando as condições de formação da imagem. Para avaliar o ajuste dos espelhos, é necessário acompanhar também o perfil obtido nas medidas de cáustica. Dessa forma, podemos relacionar cada condição de Rx do VFM e de Ry do HFM às características observadas no feixe, considerando tanto seu posicionamento quanto sua distribuição espacial. Essa comparação permite investigar quais ajustes são mais adequados para o experimento, em conjunto com a movimentação da amostra descrita anteriormente.
+
+
+\phantomsection
+\subsection*{Formulação do processo de otimização}
+\rotulosecao{sec:otimizacao-foco}{Formulação do processo de otimização}
+\addcontentsline{toc}{subsection}{Formulação do processo de otimização}
+
+A partir desses motores, podemos definir o processo de otimização como uma busca por posições que melhorem os indicadores de foco horizontal e vertical. Para isso, é necessário definir tanto o espaço de movimentação permitido quanto uma maneira de avaliar as imagens obtidas. Veja que o valor de foco será utilizado aqui como um indicador da focalização no plano observado, enquanto a posição de foco corresponde à coordenada longitudinal na qual o critério escolhido apresenta a melhor condição.
+
+Podemos representar uma configuração da linha pelo vetor
+\begin{equation}
+    \mathbf{q}=(v_b,h,v_f,b),
+    \label{eq:configuracao-motores}
+\end{equation}
+no qual $v_b$ é a posição do motor de otimização brusca do VFM, $v_f$ é a posição do motor fino do VFM, $h$ é a posição do motor do HFM e $b$ é a coordenada do \texttt{BEAM\_AXIS}, associada à movimentação longitudinal em Z. Os comandos $v_b$ e $v_f$ atuam sobre Rx do VFM, enquanto $h$ atua sobre Ry do HFM. Essas coordenadas são posições dos motores em suas respectivas unidades.
+
+Para cada coordenada $i\in\{1,2,3,4\}$, definimos um intervalo de posições permitido:
+\begin{equation}
+    D_i=[\ell_i,u_i], \qquad \ell_i<u_i.
+    \label{eq:limites-motores}
+\end{equation}
+Adotamos $D_1=D_{v_b}$, $D_2=D_h$, $D_3=D_{v_f}$ e $D_4=D_b$, seguindo a ordem de otimização. Os valores de $\ell_i$ e $u_i$ devem ser definidos a partir dos limites operacionais e da região escolhida para o experimento. Esses valores ficam como parâmetros da formulação, pois ainda precisam ser estabelecidos para a execução do método. O conjunto de configurações válidas é então dado por
+\begin{equation}
+    \Omega=\{\mathbf{q}\in D_1\times D_2\times D_3\times D_4:
+    \mathbf{q}\ \text{é operacionalmente admissível}\}.
+    \label{eq:dominio-otimizacao}
+\end{equation}
+Essa condição adicional permite considerar restrições que envolvam mais de um motor. No caso do \texttt{BEAM\_AXIS}, por exemplo, uma posição somente é válida se as compensações solicitadas em X e Y também respeitarem os limites dos eixos físicos. Na execução, as posições escolhidas devem ainda respeitar a resolução de comando de cada motor.
+
+Para uma configuração $\mathbf{q}\in\Omega$, seja $I_{\mathbf{q}}$ a imagem adquirida. Podemos representar sua avaliação por uma função de caixa preta, em que \textbf{c} representa outras condições da linha de luz que podem ou não afetar a otimização do foco, mas não são objeto de estudo dentro desse trabalho:
+\begin{equation}
+    \mathcal{B}(I_{\mathbf{q}};\mathbf{q},\mathbf{c})
+    =\bigl(F_H(\mathbf{q}),F_V(\mathbf{q})\bigr),
+    \label{eq:caixa-preta-foco}
+\end{equation}
+$\mathbf{c}$ reúne as condições de aquisição e calibração, como energia, tempo de integração e escala espacial da imagem. As saídas $F_H$ e $F_V$ são medidas que caracterizam, respectivamente, o foco horizontal e vertical, conforme o método de análise adotado. A Figura~\ref{fig:caixa-preta-foco} apresenta essa organização.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[x=1cm,y=1cm,>=stealth,font=\small,
+        entrada/.style={draw,rounded corners,fill=gray!10,text width=3.4cm,minimum height=1.1cm,align=center},
+        saida/.style={draw,rounded corners,fill=blue!7,text width=3cm,minimum height=1cm,align=center}]
+        \node[entrada] (imagem) at (0,0) {Imagem adquirida\\$I_{\mathbf{q}}$};
+        \node[entrada] (condicoes) at (0,-2.2) {Posições válidas $\mathbf{q}\in\Omega$\\e condições $\mathbf{c}$};
+        \node[draw,fill=black!85,text=white,rounded corners,text width=3.3cm,minimum height=2.5cm,align=center] (caixa) at (5,-1.1) {\textbf{Caixa preta $\mathcal{B}$}\\[5pt]Processamento da imagem\\e avaliação do foco};
+        \node[saida] (horizontal) at (10,0) {Foco horizontal\\$F_H(\mathbf{q})$};
+        \node[saida] (vertical) at (10,-2.2) {Foco vertical\\$F_V(\mathbf{q})$};
+        \draw[->,thick] (imagem.east) -- (caixa.west);
+        \draw[->,thick] (condicoes.east) -- (caixa.west);
+        \draw[->,thick] (caixa.east) -- (horizontal.west);
+        \draw[->,thick] (caixa.east) -- (vertical.west);
+    \end{tikzpicture}
+    \caption{Avaliação de uma imagem obtida com posições válidas dos motores do VFM brusco, VFM fino, HFM e BEAM\_AXIS. A caixa preta recebe a imagem e suas condições e retorna duas medidas que caracterizam o foco. Essas saídas caracterizam o plano medido e não são, por si só, as posições longitudinais dos focos. Elaboração própria.}
+    \label{fig:caixa-preta-foco}
+\end{figure}
+
+Veja que a caixa preta não exige uma medida específica de foco. Qualquer medida adequada para caracterizar o foco horizontal e vertical pode ser utilizada, desde que seu significado e o critério de comparação sejam definidos, no nosso caso utilizamos a \textbf{FWHM} (\textit{Full-Width Half-Maximum}). Dessa forma, $F_H$ e $F_V$ representam indicadores extraídos da imagem pelo método de análise adotado, sem restringir a formulação a uma maneira particular de calcular a largura do feixe. Para comparar diferentes configurações, é necessário manter o mesmo procedimento de avaliação e considerar as condições de aquisição.
+
+A partir dessas saídas, podemos definir uma função objetivo genérica:
+\begin{equation}
+    J(\mathbf{q})=\Phi\bigl(F_H(\mathbf{q}),F_V(\mathbf{q})\bigr),
+    \label{eq:objetivo-foco-generico}
+\end{equation}
+na qual $\Phi$ transforma os dois indicadores em um valor utilizado para comparar as configurações. Adotaremos a convenção de que valores menores de $J$ representam condições mais favoráveis. Caso a medida de foco escolhida aumente com a qualidade do foco, a função $\Phi$ deve incorporar essa orientação ao definir o critério de minimização (ou maximização).
+
+Por exemplo, quando $F_H$ e $F_V$ representam larguras que se deseja reduzir, uma possibilidade é utilizar
+\begin{equation}
+    J_{\mathrm{ex}}(\mathbf{q})=
+    \alpha\left[\frac{F_H(\mathbf{q})}{s_H}\right]^2+
+    (1-\alpha)\left[\frac{F_V(\mathbf{q})}{s_V}\right]^2,
+    \qquad 0<\alpha<1,
+    \label{eq:objetivo-foco}
+\end{equation}
+na qual $s_H>0$ e $s_V>0$ são referências fixas nas unidades das respectivas larguras e $\alpha$ define a importância relativa das duas direções. Essa expressão exemplifica uma escolha para $\Phi$, sem estabelecer que esse foi o critério utilizado no trabalho.
+
+Uma formulação geral do problema seria procurar um mínimo global:
+\begin{equation}
+    \mathbf{q}^{*}\in\operatorname*{arg\,min}_{\mathbf{q}\in\Omega}J(\mathbf{q}).
+    \label{eq:minimizacao-foco}
+\end{equation}
+Essa formulação considera conjuntamente as quatro coordenadas no espaço de configurações válidas. Contudo, dentro deste trabalho foi utilizada uma abordagem gulosa, na qual cada etapa seleciona a melhor condição avaliada para um motor, mantendo os demais nas posições já estabelecidas. A ordem adotada foi a otimização brusca do VFM, seguida pela otimização do HFM, pela otimização fina do VFM e, por fim, pela otimização do \texttt{BEAM\_AXIS}.
+
+Podemos descrever essa sequência partindo de uma configuração inicial $\mathbf{q}^{(0)}\in\Omega$. Como a ordem das coordenadas em $\mathbf{q}$ é $(v_b,h,v_f,b)$, definimos
+\begin{equation}
+    (i_1,i_2,i_3,i_4)=(1,2,3,4),
+    \label{eq:ordem-gulosa}
+\end{equation}
+na qual $i_k$ indica a coordenada modificada na etapa $k$. Seja $\mathbf{e}_i$ o vetor unitário associado à coordenada $i$. Para cada etapa, o conjunto de posições efetivamente avaliadas é representado por $C_k$, de forma que
+\begin{equation}
+    C_k\subseteq\left\{t\in D_{i_k}:\;
+    \mathbf{q}^{(k-1)}+
+    \bigl(t-q_{i_k}^{(k-1)}\bigr)\mathbf{e}_{i_k}\in\Omega\right\},
+    \label{eq:candidatos-gulosos}
+\end{equation}
+com $D_1=D_{v_b}$, $D_2=D_h$, $D_3=D_{v_f}$ e $D_4=D_b$, veja que a formulação matemática descrita apenas diz que cada otimização varia apenas um dos espaços de busca. Assim, cada candidato respeita os limites do motor e as restrições da configuração completa. A seleção gulosa pode ser escrita como
+\begin{equation}
+    t_k\in\operatorname*{arg\,min}_{t\in C_k}
+    J\left(\mathbf{q}^{(k-1)}+
+    \bigl(t-q_{i_k}^{(k-1)}\bigr)\mathbf{e}_{i_k}\right),
+    \label{eq:selecao-gulosa}
+\end{equation}
+\begin{equation}
+    \mathbf{q}^{(k)}=\mathbf{q}^{(k-1)}+
+    \bigl(t_k-q_{i_k}^{(k-1)}\bigr)\mathbf{e}_{i_k},
+    \qquad k=1,2,3,4.
+    \label{eq:atualizacao-gulosa}
+\end{equation}
+Nessas expressões, $J$ representa o critério de comparação adotado, e sua avaliação depende da imagem adquirida em cada configuração. A minimização é realizada entre as posições avaliadas em $C_k$, sem pressupor uma busca exata em todo o intervalo do motor. A sequência de configurações fica, portanto,
+\begin{equation}
+    \mathbf{q}^{(0)}
+    \xrightarrow{\text{VFM brusco}}\mathbf{q}^{(1)}
+    \xrightarrow{\text{HFM}}\mathbf{q}^{(2)}
+    \xrightarrow{\text{VFM fino}}\mathbf{q}^{(3)}
+    \xrightarrow{\text{BEAM\_AXIS}}\mathbf{q}^{(4)}.
+    \label{eq:sequencia-gulosa}
+\end{equation}
+
+Veja que cada etapa utiliza o resultado da anterior e altera apenas uma coordenada de comando. No caso do \texttt{BEAM\_AXIS}, isso inclui as compensações físicas em X e Y associadas ao eixo virtual. Essa organização permite realizar a otimização de forma sequencial, mas seu resultado depende da configuração inicial, das posições avaliadas e da ordem escolhida. Como os efeitos dos motores podem estar acoplados, uma única passagem por essa sequência não garante um mínimo global, nem um mínimo local em relação às quatro coordenadas simultaneamente. A configuração $\mathbf{q}^{(4)}$ representa a condição selecionada ao final do procedimento realizado e como demonstrado empiricamente nesse trabalho poderá ser visto que é uma condição suficiente de trabalho.
+Um posterior estudo pode indicar métodos de como trafegar por esse espaço \Omega\ de forma que será possível encontrar um mínimo global.
+
+No estado atual do estudo é inviável encontrar a resolução para o problema geral, de forma que há uma falta de recursos (principalmente tempo).
+Veja que o estudo inicialmente teria que classificar e validar os espaços de busca, assim como teria de haver um estudo para possíveis candidatos a $J$ e toda essa amostragem está sujeito a tempo da linha de luz, que é concorrido e possui outras prioridades.
+Contudo, o método proposto se adequa e atinge resultados satisfatórios.
+
+A definição de $J$ é especialmente relevante para automatizar esse processo. Enquanto um operador pode comparar os perfis e escolher uma condição a partir de sua interpretação, o algoritmo precisa de um critério que permita ordenar as configurações avaliadas. Dessa forma, a função objetivo estabelece o que será considerado uma melhora e quais características do feixe terão maior importância na busca.
+
+Para visualizar essa escolha, podemos representar os resultados em um plano cujas coordenadas são as medidas de foco horizontal e vertical. No caso em que essas medidas são as larguras FWHM, cada configuração $\mathbf{q}$ produz um ponto $(F_H(\mathbf{q}),F_V(\mathbf{q}))$. Veja que esse plano representa os resultados da avaliação, enquanto $\Omega$ continua sendo o espaço de posições dos quatro motores. Configurações diferentes podem produzir o mesmo par de larguras, e nem todos os pontos desse plano precisam ser atingíveis pela linha de luz.
+
+A interpretação mais simples dessa métrica $J$ é encontrar, entre os pontos avaliados, aquele que está mais próximo da origem, isto é, do foco ideal $(0,0)$, como ilustrado na Figura~\ref{fig:melhor-ponto-foco}. Essa interpretação corresponde à distância euclidiana no plano $(F_H,F_V)$ quando utilizamos $J_{\mathrm{ex}}$ com pesos iguais e uma mesma referência para as duas direções, ou seja, $\alpha=1/2$ e $s_H=s_V=s$. Nesse caso, $J_{\mathrm{ex}}=(F_H^2+F_V^2)/(2s^2)$, de forma que minimizar o custo equivale a minimizar a distância à origem. O ponto selecionado representa a melhor condição entre as configurações avaliadas, sem exigir que a origem seja fisicamente atingível.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[x=1.15cm,y=1.15cm,>=stealth,font=\small]
+        \draw[->,thick] (0,0) -- (6.4,0) node[right] {$F_H$};
+        \draw[->,thick] (0,0) -- (0,5.3) node[above] {$F_V$};
+        \foreach \r in {2.3,3.5,4.8} {
+            \draw[dashed,gray!65,domain=0:90,samples=60]
+                plot ({\r*cos(\x)},{\r*sin(\x)});
+        }
+        \foreach \px/\py in {1.8/0.4,0.5/2.0,2.0/1.5,1.2/3.1,3.1/0.8,3.2/2.3,2.4/3.7,4.3/1.4,4.2/3.1,1.3/4.3,5.2/2.3,3.7/4.4} {
+            \fill[blue!65!black] (\px,\py) circle (2.6pt);
+        }
+        \draw[green!45!black,thick,domain=0:90,samples=60]
+            plot ({sqrt(0.85*0.85+0.7*0.7)*cos(\x)},
+                  {sqrt(0.85*0.85+0.7*0.7)*sin(\x)});
+        \draw[->,green!40!black,thick] (0,0) -- (0.85,0.7);
+        \fill[green!40!black] (0.85,0.7) circle (4pt);
+        \draw[green!40!black,thick] (0.85,0.7) circle (0.15);
+        \node[draw,rounded corners,fill=white,align=center] (melhor) at (7.8,1.1) {Melhor ponto avaliado\\Menor valor de $J_{\mathrm{ex}}$};
+        \draw[->,green!40!black,thick] (melhor.west) -- (1.02,0.75);
+        \fill (0,0) circle (2pt);
+        \node[below left,align=right] at (0,0) {$(0,0)$\\Foco ideal};
+        \fill[blue!65!black] (1.0,-0.9) circle (2.6pt);
+        \node[right] at (1.2,-0.9) {Demais configurações avaliadas};
+    \end{tikzpicture}
+    \caption{Seleção da melhor condição entre vários pontos hipotéticos no plano das larguras horizontal e vertical. Para pesos iguais e referências iguais em $J_{\mathrm{ex}}$, as curvas de mesmo custo são arcos de circunferência. O ponto verde é o mais próximo da origem entre os pontos avaliados; nenhum dos demais pertence ao interior da curva que passa por ele. Os eixos possuem a mesma unidade e escala. Esboço ilustrativo, sem dados experimentais. Elaboração própria.}
+    \label{fig:melhor-ponto-foco}
+\end{figure}
+
+Para pesos ou referências diferentes, a proximidade deve ser entendida na escala definida pela função objetivo: as curvas de mesmo custo passam a ser elípticas no plano das larguras, conforme discutido a seguir.
+
+Para a função $J_{\mathrm{ex}}$ da Equação~\ref{eq:objetivo-foco}, uma curva de nível $J_{\mathrm{ex}}=c$, com $c>0$, pode ser escrita como
+\begin{equation}
+    \frac{F_H^2}{s_H^2c/\alpha}+
+    \frac{F_V^2}{s_V^2c/(1-\alpha)}=1.
+    \label{eq:elipses-objetivo}
+\end{equation}
+Essas curvas são elipses centradas na origem, das quais apenas a parte no primeiro quadrante interessa para larguras não negativas. Seus semieixos dependem das referências e do peso escolhido para cada direção. Dessa forma, minimizar $J_{\mathrm{ex}}$ corresponde a procurar configurações cujos resultados pertençam a curvas de nível de menor valor, como ilustrado na Figura~\ref{fig:plano-metricas-foco}(a). As elipses são curvas de mesmo custo no plano dos indicadores, e não representam a forma espacial do feixe.
+
+Outra possibilidade é avaliar o equilíbrio entre as duas larguras. Quando $F_H$ e $F_V$ são expressos na mesma unidade, a reta $F_H=F_V$, equivalente à reta $x=y$ nesse plano, representa condições com larguras iguais. Uma medida de afastamento dessa reta é
+\begin{equation}
+    d_{\mathrm{eq}}(\mathbf{q})=
+    \frac{|F_H(\mathbf{q})-F_V(\mathbf{q})|}{\sqrt{2}}.
+    \label{eq:distancia-equilibrio}
+\end{equation}
+Essa expressão é a distância perpendicular à diagonal, considerando escalas iguais nos dois eixos. Quanto menor seu valor, mais próximas são as larguras horizontal e vertical no plano medido. Contudo, essa medida isolada também favorece um feixe largo nas duas direções, desde que suas larguras sejam semelhantes. Na Figura~\ref{fig:plano-metricas-foco}(b), os pontos B e C pertencem à diagonal, mas C representa um feixe mais largo. O ponto D combina larguras menores com o mesmo equilíbrio.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[x=1cm,y=1cm,>=stealth,font=\small]
+        \begin{scope}
+            \node[font=\small\bfseries,align=center] at (2.1,5.7) {(a) Redução das larguras\\Curvas de nível de $J_{\mathrm{ex}}$};
+            \draw[->] (0,0) -- (4.5,0) node[right] {$F_H$};
+            \draw[->] (0,0) -- (0,4.35) node[above] {$F_V$};
+            \foreach \a/\b in {1.2/0.8,2.4/1.6,3.6/2.4} {
+                \draw[blue!70!black,thick,domain=0:90,samples=60]
+                    plot ({\a*cos(\x)},{\b*sin(\x)});
+            }
+            \node[blue!70!black,above right] at (3.0,1.4) {$c_3$};
+            \node[blue!70!black,above right] at (2.0,0.8) {$c_2$};
+            \node[blue!70!black,above right] at (0.8,0.55) {$c_1$};
+            \draw[->,orange!85!black,very thick] (2.8,3.4) -- (0.65,0.9);
+            \node[align=center] at (2.8,3.95) {Buscar menor custo};
+            \node[below,align=center] at (2.1,-0.55) {$c_1<c_2<c_3$\\Origem: limite ideal de larguras nulas};
+        \end{scope}
+        \begin{scope}[shift={(7.3,0)}]
+            \node[font=\small\bfseries,align=center] at (2.1,5.7) {(b) Equilíbrio das larguras\\Proximidade à reta $F_H=F_V$};
+            \draw[->] (0,0) -- (4.5,0) node[right] {$F_H$};
+            \draw[->] (0,0) -- (0,4.35) node[above] {$F_V$};
+            \draw[dashed,gray] (0,0.7) -- (3.4,4.1);
+            \draw[dashed,gray] (0.7,0) -- (4.1,3.4);
+            \draw[blue!70!black,thick] (0,0) -- (4.1,4.1);
+            \fill[orange!85!black] (3,0.9) circle (2.5pt) node[right,black] {A};
+            \draw[<->,orange!85!black,thick] (3,0.9) -- (1.95,1.95);
+            \node[right] at (2.7,1.7) {$d_{\mathrm{eq}}$};
+            \fill[blue!70!black] (1.6,1.6) circle (2.5pt) node[above left,black] {B};
+            \fill[blue!70!black] (3.6,3.6) circle (2.5pt) node[above left,black] {C};
+            \fill[green!45!black] (0.7,0.7) circle (2.5pt) node[above left,black] {D};
+            \node[below,align=center] at (2.1,-0.55) {B e C: mesmo equilíbrio, larguras diferentes\\D: menor largura e equilíbrio};
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Esboço de dois critérios de avaliação no plano das larguras horizontal e vertical. Em (a), as curvas elípticas representam custos iguais de $J_{\mathrm{ex}}$ para pesos e referências fixos. Em (b), a proximidade à diagonal representa equilíbrio das larguras; as linhas tracejadas indicam afastamentos constantes. Os pontos são exemplos hipotéticos, com a mesma unidade e escala nos eixos, sem corresponder a medidas experimentais. Elaboração própria.}
+    \label{fig:plano-metricas-foco}
+\end{figure}
+
+Esse equilíbrio é interessante para a discussão do astigmatismo, mas não é suficiente para caracterizá-lo. No sistema KB, a ausência de astigmatismo exige a coincidência das posições longitudinais dos focos horizontal e vertical \cite{osterhoff2019foco}. Assim, $F_H=F_V$ em uma imagem pode ocorrer mesmo quando os mínimos das duas larguras estão em posições diferentes de Z. Para avaliar diretamente essa separação, mantendo os ajustes dos espelhos fixos durante a cáustica, podemos definir
+\begin{equation}
+    \Delta z_{\mathrm{ast}}=|z_H^{*}-z_V^{*}|,
+    \label{eq:separacao-focos}
+\end{equation}
+na qual $z_H^{*}$ e $z_V^{*}$ são as posições dos mínimos horizontal e vertical obtidos pela varredura longitudinal. Portanto, a distância à diagonal é uma medida de equilíbrio em um plano, enquanto $\Delta z_{\mathrm{ast}}$ avalia a separação longitudinal dos focos. Da mesma forma, focos longitudinalmente coincidentes podem apresentar larguras mínimas diferentes.
+
+Dessa forma, é provável que um critério adequado para automatizar a otimização precise combinar a redução das larguras com o equilíbrio desejado entre as direções. Uma proposta para investigar esse compromisso é
+\begin{equation}
+    J_{\mathrm{comb}}(\mathbf{q})=J_{\mathrm{ex}}(\mathbf{q})+
+    \lambda\left[\frac{d_{\mathrm{eq}}(\mathbf{q})}{s_{\mathrm{eq}}}\right]^2,
+    \qquad \lambda\geq 0,
+    \label{eq:objetivo-combinado}
+\end{equation}
+com $s_{\mathrm{eq}}>0$ como referência fixa de comprimento. O parâmetro $\lambda$ controla a penalização da diferença entre as larguras. Essa combinação evita que a busca considere apenas o equilíbrio de um feixe largo, mas sua escolha ainda depende dos requisitos do experimento. Caso o objetivo inclua reduzir diretamente o astigmatismo, a separação $\Delta z_{\mathrm{ast}}$ também pode compor o critério, exigindo uma cáustica para cada condição dos espelhos avaliada. Essas possibilidades são propostas para estudo posterior, sem substituir a abordagem sequencial utilizada neste trabalho.
+
+\phantomsection
+\subsection*{Algoritmo de otimização sequencial}
+\rotulosecao{sec:algoritmo-otimizacao}{Algoritmo de otimização sequencial}
+\addcontentsline{toc}{subsection}{Algoritmo de otimização sequencial}
+
+A Figura~\ref{fig:algoritmo-otimizacao} apresenta a sequência de otimização descrita anteriormente. Para cada eixo, são fornecidos um limite inferior e um limite superior, que definem seu domínio $D_k=[\ell_k,u_k]$. A posição selecionada em cada etapa é mantida durante as etapas seguintes, até que sua coordenada volte a ser objeto de uma nova otimização. Dentro da passagem considerada aqui, cada eixo de comando é otimizado uma única vez.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[x=1cm,y=1cm,>=stealth,font=\small,
+        etapa/.style={draw,rounded corners,fill=blue!7,text width=8.2cm,minimum height=1.05cm,align=center},
+        terminal/.style={draw,rounded corners=12pt,fill=gray!12,text width=8.2cm,minimum height=0.85cm,align=center}]
+        \node[terminal] (entrada) at (0,0) {Receber limites dos quatro eixos\\e direções de cálculo do foco};
+        \node[etapa] (brusco) at (0,-1.65) {1. Otimizar VFM brusco em $D_1=[\ell_1,u_1]$\\Selecionar $v_b^{(1)}$ e posicionar o motor};
+        \node[etapa] (hfm) at (0,-3.3) {2. Otimizar HFM em $D_2=[\ell_2,u_2]$\\Selecionar $h^{(2)}$, mantendo o VFM brusco};
+        \node[etapa] (fino) at (0,-4.95) {3. Otimizar VFM fino em $D_3=[\ell_3,u_3]$\\Selecionar $v_f^{(3)}$ e posicionar o motor};
+        \node[etapa] (beam) at (0,-6.6) {4. Otimizar BEAM\_AXIS em $D_4=[\ell_4,u_4]$\\Selecionar $b^{(4)}$ e posicionar o eixo virtual};
+        \node[terminal] (fim) at (0,-8.25) {Retornar a configuração $\mathbf{q}^{(4)}$\\e o histórico das medidas};
+        \draw[->,thick] (entrada) -- (brusco);
+        \draw[->,thick] (brusco) -- (hfm);
+        \draw[->,thick] (hfm) -- (fino);
+        \draw[->,thick] (fino) -- (beam);
+        \draw[->,thick] (beam) -- (fim);
+        \node[draw,dashed,align=center,text width=3.4cm,inner sep=7pt] at (6.8,-4.1) {Em cada etapa:\\mover e aguardar;\\adquirir a imagem;\\calcular o foco;\\comparar candidatos.};
+    \end{tikzpicture}
+    \caption{Algoritmo guloso de otimização na ordem VFM brusco, HFM, VFM fino e BEAM\_AXIS. A posição ótima de cada etapa corresponde à melhor posição avaliada no domínio indicado, conforme a direção e o critério de foco escolhidos. Elaboração própria.}
+    \label{fig:algoritmo-otimizacao}
+\end{figure}
+
+A direção de cálculo é representada por $d_k\in\{H,V\}$ para cada etapa. Dessa forma, podemos escolher qual componente da saída da caixa preta será utilizada na comparação. No caso da FWHM utilizada neste trabalho, o critério da etapa pode ser escrito como
+\begin{equation}
+    J_k(\mathbf{q})=F_{d_k}(\mathbf{q}),
+    \qquad k=1,2,3,4,
+    \label{eq:criterio-direcao-foco}
+\end{equation}
+e a melhor condição é aquela que apresenta a menor FWHM na direção indicada. As Equações~\ref{eq:selecao-gulosa} e~\ref{eq:atualizacao-gulosa} são aplicadas utilizando $J_k$ na etapa correspondente. Por exemplo, a escolha de V para o VFM e de H para o HFM permite avaliar a direção de focalização associada a cada espelho. 
+
+O pseudocódigo a seguir explicita essas entradas. A política $S$ define como gerar as posições candidatas, respeitando a resolução dos motores; ela permite especificar a amostragem sem atribuir ao procedimento um algoritmo de busca que ainda não foi descrito. A configuração inicial é obtida pela leitura dos motores. As demais condições de aquisição e a rotina de cálculo do foco são consideradas previamente configuradas.
+
+\par\medskip
+\noindent\begin{minipage}{\linewidth}
+\textbf{Pseudocódigo -- otimização gulosa dos quatro eixos}
+\begin{Verbatim}[fontsize=\footnotesize,frame=single]
+ENTRADAS:
+  limites = [(l1,u1), (l2,u2), (l3,u3), (l4,u4)]
+  direcoes = [d1,d2,d3,d4], com dk em {H,V}
+  S = politica de geracao das posicoes candidatas
+SAIDAS: configuracao final q e historico das medidas
+
+motores <- [VFM_BRUSCO, HFM, VFM_FINO, BEAM_AXIS]
+q <- ler_posicoes(motores)
+validar_configuracao_inicial(q)
+validar_limites_e_direcoes(limites, direcoes)
+historico <- lista_vazia()
+
+PARA k DE 1 A 4:
+  Ck <- gerar_candidatos(limites[k], S, motor=motores[k])
+  melhor_valor <- infinito
+  melhor_q <- indefinida
+
+  PARA CADA t EM Ck:
+    candidata <- copiar(q)
+    candidata[k] <- t
+    SE candidata nao pertence a Omega: CONTINUAR
+    mover(motores[k], t)
+    aguardar_conclusao_e_estabilizacao()
+    Iq <- adquirir_imagem()
+    (FH,FV) <- caixa_preta(Iq, candidata, condicoes)
+    valor <- FH SE direcoes[k] = H; SENAO FV
+    registrar(historico, candidata, Iq, FH, FV)
+    SE medida_valida(valor) E valor < melhor_valor:
+      melhor_valor <- valor
+      melhor_q <- copiar(candidata)
+
+  SE melhor_q indefinida: ENCERRAR com falha da etapa k
+  mover(motores[k], melhor_q[k])
+  aguardar_conclusao_e_estabilizacao()
+  q <- melhor_q
+
+RETORNAR q, historico
+\end{Verbatim}
+\end{minipage}
+\par\medskip
+
+Veja que, ao final de cada busca, o motor retorna à melhor posição avaliada, pois a última posição visitada pode não ser a melhor. Somente após esse retorno a próxima etapa é iniciada. As imagens e os valores das duas direções são registrados mesmo quando apenas uma delas é utilizada no critério de seleção, permitindo comparar posteriormente o efeito da otimização sobre o perfil completo do feixe.
+
+\clearpage
 \phantomsection
 \section*{Resultados}
+\rotulosecao{sec:resultados}{Resultados}
 \addcontentsline{toc}{section}{Resultados}
 
 Nesta seção o autor irá expor o obtido em suas observações. Os resultados poderão estar expressos em quadros, gráficos, tabelas, fotografias ou outros meios que demonstre o que o trabalho permitiu verificar. Os dados expressos não devem ser repetidos em mais de um tipo de ilustração.
@@ -465,6 +1010,7 @@ Nesta seção o autor irá expor o obtido em suas observações. Os resultados p
 \newpage
 \phantomsection
 \section*{Discussão}
+\rotulosecao{sec:discussao}{Discussão}
 \addcontentsline{toc}{section}{Discussão}
 
 A discussão constitui uma seção com maior liberdade. Nessa fase o autor, ao tempo que justifica os meios que usou para a obtenção dos resultados, pode contrastar esses com os constantes da literatura pertinente.
@@ -483,6 +1029,7 @@ Na discussão dos resultados o autor deve cumprir as seguintes etapas:
 \newpage
 \phantomsection
 \section*{Conclusão}
+\rotulosecao{sec:conclusao}{Conclusão}
 \addcontentsline{toc}{section}{Conclusão}
 
 Mesmo que se tenham várias conclusões deve-se usar sempre o termo no singular, pois, se trata da conclusão do trabalho em si e não um mero enunciado das conclusões a que o(a) autor(a) chegou. É a recapitulação sintética dos resultados e da discussão do estudo ou pesquisa. Pode apresentar deduções lógicas e correspondentes aos objetivos propostos.
@@ -516,14 +1063,17 @@ Mesmo que se tenham várias conclusões deve-se usar sempre o termo no singular,
 % ============= ANEXOS =============
 \phantomsection
 \section*{Anexos}
+\rotulosecao{sec:anexos}{Anexos}
 \addcontentsline{toc}{section}{Anexos}
 
 Suportes elucidativos e indispensáveis para compreensão do texto são constituídos de documentos, nem sempre elaborados pelo próprio autor, que complementam a intenção comunicativa do trabalho.
 
 \subsection*{ANEXO A -- Questionário}
+\rotulosecao{sec:anexo-questionario}{ANEXO A -- Questionário}
 Conteúdo do anexo A.
 
 \subsection*{ANEXO B -- Representação gráfica}
+\rotulosecao{sec:anexo-representacao-grafica}{ANEXO B -- Representação gráfica}
 Conteúdo do anexo B.
 
 \end{document}
