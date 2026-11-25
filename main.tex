@@ -200,17 +200,18 @@
 As linhas de luz síncrotron são estações experimentais que utilizam a radiação síncrotron para realizar investigações científicas em diversas áreas do conhecimento, como biologia, química, ciência dos materiais e geociências \cite{xiao_chao_1}. 
 A incidência de raios-X de alto brilho sobre os materiais permite a obtenção de informações detalhadas sobre suas estruturas internas, tanto em escala atômica ou molecular.
 
-O \Lnls\ é um exemplo de instalação que abriga linhas de luz síncrotron, oferecendo infraestrutura avançada, como controle de estabilidade do feixe e um arranjo óptico sofisticado \cite{liu_lin_1}, para a realização de experimentos científicos de ponta, como XRF (\textit{X-ray Fluorescence}) e XANES (\textit{X-ray Absorption Near Edge Structure}) \cite{lnlslinhas}.
-Sendo uma dessas linhas a linha de luz \CNB\, onde são realizados experimentos que demandam alta precisão (na ordem nanométrica) na análise estrutural de materiais. 
+O \Lnls\ é um exemplo de instalação que abriga linhas de luz síncrotron, oferecendo infraestrutura avançada, como controle de estabilidade do feixe e um arranjo óptico sofisticado \cite{liu_lin_1}, para a realização de experimentos científicos de ponta, como \textbf{XRF} (\textit{X-ray Fluorescence}), \textbf{XANES} (\textit{X-ray Absorption Near Edge Structure}) e \textbf{STXM} (\textit{Scanning Transmission X-ray Microscopy}) \cite{lnlslinhas}.
+Sendo uma dessas linhas a linha de luz \CNB\, onde são realizados experimentos que demandam alta precisão de posicionamento (na ordem nanométrica) na análise estrutural de materiais. 
 
 Contudo, essa alta precisão requer diversos cuidados de metrologia e uma infraestrutura adequada, para além da estrutura do anel, para garantir a confiabilidade dos resultados obtidos. 
-Sendo inicialmente proposta uma metodologia para caracterização do feixe através de imagens de absorção de raios-X, XAS (\textit{X-ray Absorption Spectroscopy}), e outras técnicas complementares.
+Dessa forma, dentro desse projeto, foi inicialmente proposta uma metodologia para caracterização do feixe através de imagens de transmissão de raios-X, \textbf{STXM} (\textit{Scanning Transmission X-ray Microscopy}), e outras técnicas complementares.
 
-Esse plano de caracterização do feixe é conhecido como cáustica e envolve uma obtenção do perfil espacial do feixe em diferentes condições de operação para avaliar possíveis relações de causa-efeito dentro de ajustes.
+
+Esse plano de caracterização do feixe é conhecido como cáustica e envolve uma obtenção do perfil longitudinal do feixe em diferentes condições de operação para avaliar possíveis relações de causa-efeito dentro de ajustes experimentais.
 Como, por exemplo, a influência de elementos ópticos no perfil do feixe, variações na intensidade e possíveis distorções causadas, como astigmatismo do feixe. 
 
-Tal resultado é numericamente quantificado como o foco da linha de luz. Esse parâmetro é essencial para garantir a qualidade e a precisão dos experimentos realizados, permitindo ajustes finos na configuração óptica e na posição dos elementos experimentais.
-Além disso, possui outra característica prática, experimentos podem demandar diferentes níveis de foco, havendo até mesmo experimentos que necessitam de focos na ordem dos micrômetros, uma escala muito menor que a ordem nanométrica mencionada anteriormente.
+O resultado de foco dentro desse trabalho é numericamente quantificado como o foco da linha de luz. Esse parâmetro é essencial para garantir a qualidade e a precisão dos experimentos realizados, permitindo ajustes finos na configuração óptica e na posição da amostra.
+Além disso, possui outra característica prática, experimentos podem demandar diferentes níveis de foco, havendo até mesmo experimentos que necessitam de focos na ordem dos micrômetros, uma resolução muito menor que a ordem nanométrica mencionada anteriormente.
 
 Essa variação na necessidade de foco implica que a linha de luz deve ser capaz de ajustar seu perfil de feixe de acordo com os requisitos específicos de cada experimento, garantindo assim a flexibilidade e a precisão necessárias para diferentes tipos de investigações científicas.
 
@@ -222,17 +223,11 @@ Essa variação na necessidade de foco implica que a linha de luz deve ser capaz
 \rotulosecao{sec:objetivo}{Objetivo}
 \addcontentsline{toc}{section}{Objetivo}
 
-O problema abordado nesse projeto envolve a caracterização e estudo de um método de cáustica para a linha de luz \CNB. 
-Compreende dentro desse contexto uma experimentação com âmparo teórico, buscando validar os resultados obtidos e compreender os fenômenos observados de maneira mais aprofundada.
-Mas ainda obter resultados empíricos que possam corroborar as previsões teóricas, garantindo assim a robustez e a confiabilidade das conclusões do estudo.
+Este trabalho tem como objetivo desenvolver um método de caracterização do foco por medidas de cáustica para a linha de luz \CNB, por meio de um algoritmo implementado em código modular e integrado ao sistema de controle \textbf{EPICS} (\textit{Experimental Physics and Industrial Control System}), com auxílio do \textit{framework} \textit{Bluesky} para a execução do procedimento experimental. O desenvolvimento articula a aquisição automatizada de dados e seu processamento para caracterizar a evolução das larguras horizontal e vertical do feixe ao longo da região focal, quantificar o astigmatismo a partir da separação longitudinal entre os focos e orientar ajustes de correção dos elementos ópticos.
 
-A obtenção de um método de cáustica bem definido é extremamente benéfico para os operadores da linha de luz, uma vez que se trata de um processo manual e qualitativo. 
-Dessa forma, as análises ficam inconsistentes entre si, dificultando a comparação de resultados e a reprodutibilidade dos experimentos.
-Além de que há um ganho de tempo para outras atividades.
+A motivação para esse método é substituir um procedimento manual, baseado predominantemente na avaliação qualitativa das imagens de \textbf{STXM}, por um processo automático, sistematizado e quantitativo. À medida que os ajustes aproximam o feixe da condição de foco desejada, as diferenças entre essas imagens podem se tornar indistinguíveis à percepção humana, limitando a avaliação visual de novas correções. A obtenção de métricas de foco permite avaliar essas diferenças quantitativamente e fundamentar os ajustes da linha.
 
-Veja que seu desenvolvimento está em de acordo com a automatização dos sistemas de controle e análise da linha de luz através do \textit{framework} de operação EPICS aliado à biblioteca \textit{Bluesky}, mais adiante entraremos em detalhe sobre esses sistemas.
-
-O resultado pretendido dentro desse projeto é um plano de cáustica que capte os dados de forma automatizada e que possa ser analisado por um script ou programa de interpretação e processamento de dados. 
+A sistematização da aquisição e da análise, acompanhada do registro das condições experimentais, busca tornar as medidas reprodutíveis e comparáveis entre si. Dessa forma, o método permite avaliar as condições de focalização da linha em diferentes períodos, acompanhar sua evolução e comparar os efeitos dos ajustes ópticos, além de reduzir a intervenção manual e o tempo dedicado à caracterização do feixe.
 
 \newpage
 \phantomsection
@@ -241,12 +236,12 @@ O resultado pretendido dentro desse projeto é um plano de cáustica que capte o
 \addcontentsline{toc}{section}{Método}
 
 \phantomsection
-\subsection*{Descrição dos fenômenos observados.}
-\rotulosecao{sec:fenomenos-observados}{Descrição dos fenômenos observados.}
-\addcontentsline{toc}{subsection}{Descrição dos fenômenos observados.}
+\subsection*{Fundamentos da formação de imagens por transmissão}
+\rotulosecao{sec:fenomenos-observados}{Fundamentos da formação de imagens por transmissão}
+\addcontentsline{toc}{subsection}{Fundamentos da formação de imagens por transmissão}
 
 Raios-X são radiações eletromagnéticas de alta energia, capazes de atravessar materiais opacos à luz visível. Eles possuem comprimentos de onda muito curtos, geralmente na faixa de 0,01 a 10 nanômetros, o que lhes confere grande poder de penetração e capacidade de interação com a matéria em nível atômico.
-Nesse regime, os raios-X são absorvidos pela matéria através do efeito foto-elétrico, nesse processo um fóton incidente transfere toda a sua energia a um elétron, que é então ejetado do átomo, resultando na ionização da matéria.
+Nesse regime, os raios-X são absorvidos pela matéria através do efeito foto-elétrico, processo no qual um fóton incidente transfere toda a sua energia a um elétron, que é ejetado do átomo, resultando na ionização da matéria.
 
 Para que um nível eletrônico específico seja afetado pela radiação dos raios-X, a energia do fóton incidente deve ser suficiente para superar a energia de ligação do elétron nesse nível. Caso contrário, o fóton não conseguirá ejetar o elétron, e a interação não resultará em ionização \cite{matthew_newville}. 
 O processo é exemplificado na Figura \ref{efeito-fotoeletrico}.
@@ -262,15 +257,13 @@ Contudo, esse fenômeno não é exclusivo na incidência de raios-X sobre uma am
 
 Os outros fenômenos que podem ocorrer são: 
 \begin{itemize}
-    \item Espalhamento Elástico (Rayleigh): um fóton incidente colide com um elétron, transferindo parte de sua energia e mudando sua direção. 
-    \item Espalhamento Inelástico (Compton): o fóton é espalhado elasticamente pela matéria, sem perda de energia.
+    \item Espalhamento: o fóton incidente é desviado de sua trajetória original devido à interação com a matéria, podendo ser elástico (Rayleigh) ou inelástico (Compton).
     \item Transmissão sem interação: O fóton atravessa a amostra sem ser absorvido ou espalhado. Permite medir a atenuação e formar imagens por transmissão.
     \item Fluorescência de raios-X: um fóton incidente é absorvido por um átomo, que em seguida emite um fóton de menor energia característico do elemento.
     \item Luminescência: emissão de luz por um material após absorver radiação, podendo ocorrer em diferentes comprimentos de onda dependendo do material.
 \end{itemize}
 
-Veja que essa é uma listagem dos fenômenos que podem ocorrer quando a radiação interage com a matéria, como ilustrada na Figura \ref{exemplos-de-interacao-materia}. 
-Apesar de não haver muita relevância para o desenvolvimento do método de cáustica, sua compreensão é importante para o entendimento da linha de luz \CNB e sobretudo sobre algumas limitações do método.
+Esses processos são ilustrados na Figura~\ref{exemplos-de-interacao-materia} e ajudam a contextualizar as diferentes formas de investigar uma amostra com raios-X. Neste trabalho, o sinal utilizado para a caracterização do foco é obtido por transmissão.
 
 \begin{figure}[h]
     \centering
@@ -279,7 +272,7 @@ Apesar de não haver muita relevância para o desenvolvimento do método de cáu
     \label{exemplos-de-interacao-materia}
 \end{figure}
 
-Através da equação de \textbf{Beer-Lambert}. É possível calcular a atenuação da radiação ao atravessar a amostra, relacionando a intensidade incidente com a intensidade transmitida e a espessura do material.
+Através da equação de \textbf{Beer-Lambert} é possível calcular a atenuação da radiação ao atravessar a amostra, relacionando a intensidade incidente com a intensidade transmitida e a espessura do material.
 
 \begin{equation}
     I(E) = I_0(E) \cdot \exp\left[-\mu(E) \cdot t\right]
@@ -319,11 +312,32 @@ A Figura~\ref{fig:atenuacao-amostra} ilustra a redução da intensidade ao atrav
     \label{fig:atenuacao-amostra}
 \end{figure}
 
-Dentro do arranjo experimental é possível utilizar fotodiodos para medição tanto de $I(E)$ quanto para $I_0(E)$, enquanto que $t$ é facilmente medido diretamente com instrumentos de medição de espessura, como paquímetros ou através de um método de processamento das amostras.
-Dessa forma, teremos que a equação se transforma em:
+Dentro do arranjo experimental é possível utilizar fotodiodos para medição tanto de $I_1(E)$ quanto para $I_0(E)$, enquanto que $t$ é facilmente medido diretamente com instrumentos de medição de espessura, como paquímetros ou através de um método de processamento das amostras.
+Dessa forma, podemos isolar o coeficiente $\mu(E)$ na lei de Beer--Lambert. Primeiro, dividimos os dois lados pela intensidade incidente $I_0(E)$:
+
+\[
+    \frac{I_1(E)}{I_0(E)} = \exp\left[-\mu(E)t\right].
+\]
+
+Aplicando o logaritmo natural aos dois lados e utilizando a identidade $\ln(e^x)=x$, obtemos:
+
+\[
+    \ln\left[\frac{I_1(E)}{I_0(E)}\right]
+    = \ln\left\{\exp\left[-\mu(E)t\right]\right\}
+    = -\mu(E)t.
+\]
+
+Em seguida, dividimos por $-t$ para obter $\mu(E)$. Pela propriedade dos logaritmos, inverter a razão dentro do logaritmo equivale a trocar seu sinal:
+
+\[
+    -\ln\left[\frac{I_1(E)}{I_0(E)}\right]
+    = \ln\left[\frac{I_0(E)}{I_1(E)}\right].
+\]
+
+Assim, a expressão para o coeficiente de absorção linear é:
 
 \begin{equation}
-    \mu(E) = -\frac{1}{t} \ln\left[\frac{I(E)}{I_0(E)}\right] = \frac{1}{t} \ln\left[\frac{I_0(E)}{I(E)}\right] = \frac{1}{t} \ln\left[\frac{I_0}{I}(E)\right]
+    \mu(E) = -\frac{1}{t} \ln\left[\frac{I_1(E)}{I_0(E)}\right] = \frac{1}{t} \ln\left[\frac{I_0(E)}{I_1(E)}\right]
     \label{eq:absorption-beer-lambert}
 \end{equation}
 
@@ -336,25 +350,16 @@ A partir dessa equação é possível fazer uma curva de absorção característ
     \label{curva-absorcao}
 \end{figure}
 
-Sendo que três áreas são característica do espectro de absorção: a Pré-borda, XANES (X-ray Absorption Near Edge Structure) e EXAFS (Extended X-ray Absorption Fine Structure), como exemplificado na Figura \ref{curva-absorcao}.
+Para contextualizar a leitura desse espectro, podemos distinguir três regiões, indicadas na Figura~\ref{curva-absorcao}. A \textbf{pré-borda} antecede a borda de absorção e pode apresentar pequenas estruturas associadas a transições eletrônicas. A região de \textbf{XANES} (\textit{X-ray Absorption Near Edge Structure}) compreende a borda e suas proximidades, onde as características do espectro ajudam a investigar o estado de oxidação e o ambiente químico do elemento. Mais acima em energia, a região de \textbf{EXAFS} (\textit{Extended X-ray Absorption Fine Structure}) apresenta oscilações que permitem estudar as distâncias e a organização dos átomos vizinhos ao átomo absorvedor. Essas regiões são investigadas variando a energia do feixe, como contextualizado em \cite{matthew_newville}.
 
-\textbf{Pré-Borda}: É a região do espectro de absorção que ocorre antes do pico de absorção principal. Nessa região, a absorção é relativamente baixa e geralmente não apresenta estruturas finas. 
+Na microscopia de transmissão de raios-X por varredura (STXM), a movimentação da amostra em relação ao feixe permite registrar $I_0$ e $I_1$ em cada posição $(x,y)$. Pela lei de Beer--Lambert, a razão $I_1/I_0$ está relacionada à absorção ao longo do caminho atravessado na amostra. Ao associar essa razão, ou o valor $\ln(I_0/I_1)$, a cada posição, construímos uma imagem que mostra a distribuição espacial do contraste de transmissão. Mais adiante, na seção ``\nameref{sec:linha-de-luz}'', a Figura~\ref{fig:formacao-imagem-stxm} apresenta esse processo com mais detalhes.
 
-\textbf{XANES}: É a região caracterizada pela aumento súbido da absorção próximo ao pico de absorção principal. Nessa região, podem ser observadas estruturas finas que fornecem informações sobre o estado de oxidação, coordenação e estado de \textit{spin} do elemento observado.
+Também é possível combinar imagens de STXM adquiridas em diferentes energias para investigar a resposta espectral de cada região da amostra. Para a medida de cáustica, porém, é interessante manter a energia $E$ fixa durante a varredura longitudinal, evitando que mudanças no contraste de absorção e nas condições de focalização associadas à energia se misturem aos efeitos do posicionamento da amostra.
 
-\textbf{EXAFS}: É a região do espectro de absorção que ocorre após o pico de absorção principal. Nessa região, a absorção apresenta oscilações finas que fornecem informações sobre a distância e o número de átomos vizinhos ao elemento absorvedor.
+Para estimar a largura do feixe, analisamos como o sinal de transmissão varia ao atravessar uma borda da estrutura utilizada como referência na amostra. O feixe possui uma extensão finita e, por isso, a passagem entre os dois lados da borda aparece suavizada na imagem. A análise desse perfil permite estimar a largura do feixe na direção considerada, levando em conta as aproximações sobre a borda e o perfil do feixe. Mais adiante, na seção ``\nameref{sec:modelagem-matematica}'', a Figura~\ref{fig:derivada-convolucao-feixe} e a Equação~\ref{eq:derivada-convolucao-perfil-feixe} detalham essa relação.
 
-Além disso, há a relação do \textbf{XAS} com a \textbf{XRF}(\textit{X-ray Fluorescence}), que é uma técnica complementar utilizada para determinar a composição elementar de uma amostra \cite{murilo_theodoro}. 
-Enquanto o \textbf{XAS} fornece informações sobre o estado químico e a estrutura local ao redor de um elemento específico, a \textbf{XRF} permite identificar e quantificar os elementos presentes na amostra.
-Dessa forma, os seguintes métodos desenvolvidos dentro desse projeto também podem ser utilizados para imagens geradas a partir de técnicas de imageamento através de fluorescência de raios-X, com seus devidos ajustes. 
-A equação \ref{eq:XAS-XRF-relation} demonstra essa relação e pode ser utilizada para gerar imagens possíveis de serem utilizadas para a execução do método.
-Uma questão levantada durante o desenvolvimento do método até questionou se devido ao maior nível de precisão desses detectores de fluorescência haveria ganho na caracterização do feixe,
-contudo não entramos em maiores detalhes, pois vários experimentos utilizar o método proposto pela equação \ref{eq:absorption-beer-lambert}.
+Ao repetir essa análise em diferentes posições longitudinais da amostra, isto é, variando sua distância em relação à região focal, obtemos a evolução das larguras horizontal e vertical do feixe ao longo da direção de propagação. Esse conjunto de medidas constitui a cáustica e permite localizar os focos nas duas direções e avaliar sua separação. Mais adiante, na seção ``\nameref{sec:metodo-caustica}'', a Figura~\ref{fig:sample-stage-foco} apresenta a movimentação utilizada nesse procedimento.
 
-\begin{equation}
-    I_{XAS}(E) = \int_{E} I_{XRF}(E', h\omega) dE'
-    \label{eq:XAS-XRF-relation}
-\end{equation}
 
 \phantomsection
 \subsection*{Descrição da linha de luz}
@@ -362,7 +367,7 @@ contudo não entramos em maiores detalhes, pois vários experimentos utilizar o 
 \addcontentsline{toc}{subsection}{Descrição da linha de luz}
 
 Diferente de dispositivos de espectroscopia de luz visível, infra-vermelho e micro-ondas, não há um aparato comercial que consiga reproduzir de forma completa os experimentos de espectroscopia de absorção de raios-X.
-Dentro desse contexto vem a construção de linhas de luz que possibilitam realizar experimentos (como \textbf{XAS}), como a linha de luz \CNB.
+Dentro desse contexto vem a construção de linhas de luz que possibilitam realizar experimentos (como \textbf{STXM}), como a linha de luz \CNB.
 
 \begin{figure}[h]
     \centering
@@ -384,14 +389,12 @@ Essa disposição faz com que o feixe de elétrons sofra uma oscilação periód
     \label{ondulador}
 \end{figure}
 
-Além disso, há o controle de otimização da energia emitida pelo Ondulador, medida através de eV, através de um sistema de ajuste da distância entre os ímãs, permitindo variar a intensidade e/ou a frequência da radiação emitida, esse parâmetro é referenciado como \textbf{GAP}.
-
-Veja que o ajuste do \textbf{GAP} é o que permite otimizar a energia em equações como a equação \ref{eq:absorption-beer-lambert}
+Além disso, há o controle de otimização do fluxo emitido pelo Ondulador, medido em fótons por segundo, através de um sistema de ajuste da distância entre os ímãs, permitindo otimizar o fluxo para um determinado espectro de energias, esse parâmetro é referenciado como \textbf{GAP} (devido ao seu significado de "espaço" ou "abertura", em inglês, entre os imãs).
 
 Enquanto isso, as fendas (\textit{slits}) são utilizadas para definir a geometria do feixe de luz, controlando sua largura e altura, e garantindo que apenas a porção desejada do feixe passe para a próxima etapa.
 Como efeito imediato de seu fechamento, ocorre a redução do fluxo de fótons, que pode ser vantajosa para experimentos com amostras biológicas e suscetíveis à radiação, enquanto a abertura das fendas permite um maior fluxo de fótons, adequado para experimentos que requerem maior intensidade de radiação e maior contraste.
 
-Na sequência óptica da linha \CNB, o primeiro espelho, denominado \textbf{M1} (\textit{Mirror-1}), focaliza o feixe no plano da fonte secundária. Nesse plano, a \textbf{SSA}(\textit{Secondary Source Aperture}) delimita a região transmitida e define o tamanho efetivo da fonte vista pelos componentes seguintes (um comportamento muito similar ao das fendas). Sua abertura permite estabelecer um compromisso entre fluxo de fótons e coerência espacial. O segundo espelho, denominado \textbf{M2} (\textit{Mirror-2}), realiza a deflexão horizontal do feixe, direcionando-o ao longo do percurso óptico \cite{lnlscarnaubaoptica}, \cite{nanomax2021}.
+Na sequência óptica da linha \CNB, o primeiro espelho, denominado \textbf{M1} (\textit{Mirror-1}), focaliza o feixe no plano da fonte secundária. Nesse plano, a \textbf{SSA}(\textit{Secondary Source Aperture}) delimita a região transmitida e define o tamanho efetivo na horizontal da fonte vista pelos componentes seguintes (um comportamento muito similar ao das fendas). Sua abertura permite estabelecer um compromisso entre fluxo de fótons e coerência espacial. O segundo espelho, denominado \textbf{M2} (\textit{Mirror-2}), realiza a deflexão horizontal do feixe, direcionando-o ao longo do percurso óptico \cite{lnlscarnaubaoptica}, \cite{nanomax2021}.
 
 As vistas frontal e traseira do conjunto do \textbf{M1} são apresentadas na Figura~\ref{fig:m1-hutch-a}. 
 Uma imagem do espelho \textbf{M2} foi omitida, uma vez que é similar ao \textbf{M1}.
@@ -412,10 +415,9 @@ Uma imagem do espelho \textbf{M2} foi omitida, uma vez que é similar ao \textbf
     \label{fig:m1-hutch-a}
 \end{figure}
 
-A seleção da energia utilizada no experimento é realizada pelo \textbf{monocromador de quatro cristais (4CM)}, que utiliza reflexões em cristais de silício para selecionar uma faixa estreita de energias. Essa seleção obedece à condição de Bragg, relacionando o comprimento de onda ao espaçamento entre os planos cristalinos e ao ângulo de incidência. Assim, enquanto o \textbf{GAP} do ondulador ajusta o espectro disponível na fonte, o monocromador seleciona a energia incidente na amostra e permite sua varredura durante a aquisição de espectros de \textbf{XAS} \cite{lnlscarnaubaoptica}.
+A seleção da energia utilizada no experimento é realizada pelo \textbf{monocromador de quatro reflexões (4CM)}, que utiliza difrações em geometria de reflexão em cristais de silício para selecionar uma faixa estreita de energias. Essa seleção obedece à condição de Bragg, relacionando o comprimento de onda ao espaçamento entre os planos cristalinos e ao ângulo de incidência. Assim, enquanto o \textbf{GAP} do ondulador ajusta o espectro disponível na fonte, o monocromador seleciona a energia incidente na amostra e permite sua varredura durante a aquisição de espectros de \textbf{XAS} \cite{lnlscarnaubaoptica}.
 Veja que o \textbf{monocromador} é essencial para filtrar os comprimentos de onda indesejados, uma vez que os onduladores emitem radiação em múltiplos harmônicos que podem prejudicar a análise experimetal.
-
-O conjunto do \textbf{monocromador de quatro cristais (4CM)} é apresentado na Figura~\ref{fig:4cm-hutch-c}.
+O conjunto do \textbf{monocromador de quatro reflexões (4CM)} é apresentado na Figura~\ref{fig:4cm-hutch-c}.
 
 \begin{figure}[htbp]
     \centering
@@ -424,26 +426,25 @@ O conjunto do \textbf{monocromador de quatro cristais (4CM)} é apresentado na F
     \label{fig:4cm-hutch-c}
 \end{figure}
 
-Próximo à amostra, os espelhos \textbf{Kirkpatrick--Baez (KB)} realizam a focalização final. O par possui um espelho responsável pela focalização vertical e outro pela horizontal, concentrando o feixe em uma pequena região da amostra. Esse arranjo está presente nas estações TARUMÃ e SAPOTI e permite realizar medidas espacialmente resolvidas \cite{lnlscarnaubaoptica}.
-
+Próximo à amostra, os espelhos \textbf{Kirkpatrick--Baez (KB)} realizam a focalização final. O par possui um espelho responsável pela focalização vertical e outro pela horizontal, conhecidos na literatura como HFM (\textit{Horizontal Focusing Mirror}) e VFM (\textit{Vertical Focusing Mirror}), concentrando o feixe em uma pequena região da amostra. Esse arranjo está presente nas estações TARUMÃ e SAPOTI e permite realizar medidas espacialmente resolvidas \cite{lnlscarnaubaoptica}.
 O arranjo dos espelhos \textbf{Kirkpatrick--Baez (KB)} é ilustrado na Figura~\ref{fig:kb-diagram}.
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.75\linewidth]{imagens/kb-diagram.png}
-    \caption{Diagrama do arranjo de espelhos Kirkpatrick--Baez (KB). Imagem extraída de \href{https://www.j-tec.co.jp/english/optical/optical-products/kb-mirror/}{JTEC Corporation}.}
+    \caption{Diagrama do arranjo de espelhos Kirkpatrick--Baez (KB). O nome M1 e M2 não são condizentes com os espelhos da linha de luz \CNB. Imagem extraída de \href{https://www.j-tec.co.jp/english/optical/optical-products/kb-mirror/}{JTEC Corporation}.}
     \label{fig:kb-diagram}
 \end{figure}
 
-Desse modo, a óptica prepara a energia e a distribuição espacial da radiação incidente. A formação de mapas ocorre pela varredura da amostra em relação ao feixe focalizado e pelo registro do sinal em cada posição; ao repetir esse procedimento para diferentes energias, podem ser obtidos mapas espectroscópicos de absorção \cite{lnlscarnaubaoptica}. A Figura~\ref{fig:formacao-imagem-xas} ilustra a formação de uma imagem por varredura em transmissão, relacionando a movimentação da amostra às leituras dos fotodiodos.
+Desse modo, a óptica focaliza e seleciona a energia do feixe incidente. A formação de mapas ocorre pela varredura da amostra em relação ao feixe focalizado e pelo registro do sinal em cada posição; ao repetir esse procedimento para diferentes energias, podem ser obtidos mapas espectroscópicos de absorção \cite{lnlscarnaubaoptica}. A Figura~\ref{fig:formacao-imagem-stxm} ilustra a formação de uma imagem por varredura em transmissão, relacionando a movimentação da amostra às leituras dos fotodiodos.
 
-Para cada posição $(x,y)$ da varredura, são registradas as intensidades incidente $I_0$ e transmitida $I_1$. A razão $I_1/I_0$ fornece a transmissão naquele ponto, e o valor $\ln(I_0/I_1)$ representa a absorção integrada ao longo da espessura atravessada, conforme a Equação~\ref{eq:absorption-beer-lambert}. Ao associar cada valor à sua posição, obtém-se o mapa bidimensional representado por $I(x,y)$ na figura; essa notação identifica a imagem reconstruída, cujo contraste depende da grandeza escolhida no processamento. Uma varredura com energia fixa produz um mapa nessa energia, enquanto a repetição para diferentes energias permite obter um espectro de XAS em cada posição amostrada.
+Para cada posição $(x,y)$ da varredura, são registradas as intensidades incidente $I_0$ e transmitida $I_1$. A razão $I_1/I_0$ fornece a transmissão naquele ponto, e o valor $\ln(I_0/I_1)$ representa a absorção integrada ao longo da espessura atravessada, conforme a Equação~\ref{eq:absorption-beer-lambert}. Ao associar cada valor à sua posição, obtém-se o mapa bidimensional representado por $I(x,y)$ na figura; essa notação identifica a imagem reconstruída, cujo contraste depende da grandeza escolhida no processamento. Uma varredura com energia fixa produz um mapa nessa energia, enquanto a repetição para diferentes energias permite obter um espectro de \textbf{XAS} (X-ray Absorption Spectroscopy) em cada posição amostrada.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{imagens/esquema_formacao_imagem_xas_v2.png}
-    \caption{Formação de uma imagem por varredura em transmissão. O feixe atravessa o fotodiodo de monitoramento $I_0$, incide sobre a amostra e tem sua intensidade transmitida registrada pelo fotodiodo $I_1$. A varredura da amostra em $(x,y)$ permite associar as leituras a cada posição e construir um mapa. A repetição em diferentes energias possibilita o imageamento espectroscópico por XAS. Representação esquemática, sem escala.}
-    \label{fig:formacao-imagem-xas}
+    \includegraphics[width=\textwidth]{imagens/formacao-imagem-stxm.png}
+    \caption{Formação de uma imagem de STXM por varredura em transmissão. O feixe é monitorado por $I_0$, incide sobre a amostra e tem sua intensidade transmitida registrada por $I_1$. A grelha sobre a imagem delimita os pixels, cada um associado a uma posição da varredura em $(x,y)$; o trajeto em destaque representa uma varredura do tipo \textit{snake scan}, com alternância do sentido entre linhas consecutivas. A repetição das imagens em diferentes energias permite obter informação espectral. Representação esquemática, sem escala.}
+    \label{fig:formacao-imagem-stxm}
 \end{figure}
 
 \phantomsection
@@ -453,7 +454,6 @@ Para cada posição $(x,y)$ da varredura, são registradas as intensidades incid
 
 Dentro da linha de luz \CNB\ existem duas estações experimentais, sendo elas a TARUMÃ e a SAPOTI. 
 A primeira providencia um tamanho de feixe submicrométrico e ambiente de amostras variável, enquanto a SAPOTI possui tamanho de feixe nanométrico e ambiente de amostras criogênico e de ultra-alto vácuo.
-
 As estações SAPOTI e TARUMÃ são apresentadas na Figura~\ref{fig:estacoes-sapoti-taruma}.
 
 \begin{figure}[htbp]
@@ -504,10 +504,10 @@ A linha de luz \CNB\ é controlada por um sistema \textbf{EPICS} (\textit{Experi
 Se trata de um sistema utilizado para controle de instalações científicas de grande escala sobre uma rede, isso é especialmente interessante em uma linha de raios-X, 
 pois pode haver movimentação remota durante a execução dos experimentos, uma vez que um sistema manual demandaria interromper o fluxo de raios-X na amostra para movimentação dos motores ou posicionamento de detectores.
 
-Se trata de um sistema de alto tráfico dentro da rede, com uma interface que oferece \textit{Channel Access} (CA) para controle do estado do sistema, que utilizam comunicação TCP/IP e abstraem questões como tamanho de pacotes e rajadas de pacotes.
+Se trata de um sistema de alto tráfego dentro da rede, com uma interface que oferece \textit{Channel Access} (CA) para controle do estado do sistema, que utilizam comunicação TCP/IP e abstraem questões como tamanho e rajada de pacotes.
 
-Para uma instalação científica que possui diversos dispositivos é necessário osquestrar a rede de uma maneira racional, portanto, alguns mecanismos de comunicação são seguidos como delimitação da taxa de atualização de uma \textit{Process Variable} (PV), que se trata de uma variável de controle do sistema EPICS  
-como um posicionamento de um motor ou temperatura de um porta-amostras, ou ainda o monitoramento por eventos através de \textit{subscriptions}, ou seja, um cliente assina uma \textbf{PV} e recebe notificações conforme eventos configurados, evitando a consulta periódica através de \textit{polling}.
+Para uma instalação científica que possui diversos dispositivos é necessário osquestrar a rede de uma maneira racional, portanto, alguns mecanismos como delimitação da taxa de atualização de uma \textit{Process Variable} (PV), que se trata de uma variável de controle do sistema EPICS  
+(como um posicionamento de um motor ou temperatura de um porta-amostras), ou ainda o monitoramento por eventos através de \textit{subscriptions}, ou seja, um cliente assina uma \textbf{PV} e recebe notificações conforme eventos configurados, evitando a consulta periódica através de \textit{polling}.
 
 Como citado no trecho anterior, a palavra cliente também mostra outra questão importante da arquitetura do sistema \textbf{EPICS}. A comunicação através do \textit{Channel Access} funciona como um sistema cliente-servidor, em que os servidores disponibilizam as \textbf{PVs} e os clientes acessam essas variáveis para leitura, escrita ou monitoramento. Um servidor pode atender diversos clientes, assim como um cliente pode acessar variáveis disponibilizadas por diferentes servidores \cite{epics_arquitetura}.
 
@@ -543,13 +543,13 @@ A Figura~\ref{fig:bluesky-arquitetura} apresenta essa integração, desde o cont
     \label{fig:bluesky-arquitetura}
 \end{figure}
 
-O \textbf{Run Engine} é o componente do Bluesky responsável por executar os planos experimentais, escritos como geradores Python que produzem mensagens descrevendo as ações desejadas. Ele interpreta essas mensagens, coordena as operações e as esperas necessárias e emite documentos com os dados e metadados da execução. Esses documentos podem ser recebidos por funções de acompanhamento, chamadas \textit{callbacks}, para produzir gráficos ou encaminhar os registros ao armazenamento. O Run Engine também oferece mecanismos de pausa e retomada, conforme as condições do plano, facilitando o tratamento de interrupções \cite{bluesky_framework}.
+O \textit{Run Engine} é o componente do Bluesky responsável por executar os planos experimentais, escritos como geradores Python que produzem mensagens descrevendo as ações desejadas. Ele interpreta essas mensagens, coordena as operações e as esperas necessárias e emite documentos com os dados e metadados da execução. Esses documentos podem ser recebidos por funções de acompanhamento, chamadas \textit{callbacks}, para produzir gráficos ou encaminhar os registros ao armazenamento. O \textit{Run Engine} também oferece mecanismos de pausa e retomada, conforme as condições do plano, facilitando o tratamento de interrupções \cite{bluesky_framework}.
 
-O \textbf{Ophyd} fornece a camada de abstração dos dispositivos. Sinais individuais, como PVs de posição e de aquisição, podem ser agrupados em objetos que representam motores ou detectores. Esses objetos oferecem interfaces padronizadas para operações como ajustar um valor, disparar uma aquisição e ler resultados, por meio de métodos como \texttt{set()}, \texttt{trigger()} e \texttt{read()}. Embora sua integração com EPICS seja frequente, essa abstração também pode representar outros sistemas de controle \cite{ophyd_documentacao}.
+O \textit{Ophyd} fornece a camada de abstração dos dispositivos. Sinais individuais, como PVs de posição e de aquisição, podem ser agrupados em objetos que representam motores ou detectores. Esses objetos oferecem interfaces padronizadas para operações como ajustar um valor, disparar uma aquisição e ler resultados, por meio de métodos como \texttt{set()}, \texttt{trigger()} e \texttt{read()}. Embora sua integração com \textbf{EPICS} seja frequente, essa abstração também pode representar outros sistemas de controle \cite{ophyd_documentacao}.
 
-O \textbf{Suitcase} reúne ferramentas de serialização que convertem os documentos produzidos pelo Bluesky em formatos de arquivo, conforme o pacote de exportação utilizado. A exportação pode ocorrer durante a aquisição ou a partir de documentos recuperados posteriormente. Sua função é preparar os registros para persistência e intercâmbio com outros programas. Como indicado na figura, detectores que produzem grandes volumes de dados também podem gravar diretamente no armazenamento, enquanto o fluxo de aquisição mantém as informações necessárias para associar esses arquivos ao experimento \cite{suitcase_documentacao,bluesky_diagrama}.
+O \textit{Suitcase} reúne ferramentas de serialização que convertem os documentos produzidos pelo \textit{Bluesky} em formatos de arquivo, conforme o pacote de exportação utilizado. A exportação pode ocorrer durante a aquisição ou a partir de documentos recuperados posteriormente. Sua função é preparar os registros para persistência e intercâmbio com outros programas. Como indicado na figura, detectores que produzem grandes volumes de dados também podem gravar diretamente no armazenamento, enquanto o fluxo de aquisição mantém as informações necessárias para associar esses arquivos ao experimento \cite{suitcase_documentacao,bluesky_diagrama}.
 
-A relação com as ferramentas de análise ocorre tanto durante quanto após a medida. Durante a aquisição, os documentos podem alimentar rotinas de visualização e redução de dados, oferecendo retorno ao operador sobre o andamento do experimento. Posteriormente, os registros armazenados podem ser recuperados para análise em ambientes como Jupyter, utilizando NumPy para operações com arranjos, SciPy para ajustes e processamento numérico e Matplotlib para visualização \cite{bluesky_framework}. O diagrama representa o acesso aos dados por Databroker/Intake; na documentação atual, Tiled com os \textit{Bluesky Tiled Plugins} é indicado para novas instalações, enquanto Databroker atende também à compatibilidade com sistemas existentes \cite{databroker_documentacao}.
+A relação com as ferramentas de análise ocorre tanto durante quanto após a medida. Durante a aquisição, os documentos podem alimentar rotinas de visualização e redução de dados, oferecendo retorno ao operador sobre o andamento do experimento. Posteriormente, os registros armazenados podem ser recuperados para análise em ambientes como \textit{Jupyter}, utilizando \textit{NumPy} para operações com arranjos, \textit{SciPy} para ajustes e processamento numérico e \textit{Matplotlib} para visualização \cite{bluesky_framework}. O diagrama representa o acesso aos dados por Databroker/Intake; na documentação atual, Tiled com os \textit{Bluesky Tiled Plugins} é indicado para novas instalações, enquanto Databroker atende também à compatibilidade com sistemas existentes \cite{databroker_documentacao}.
 
 Para o método de cáustica proposto neste trabalho, essa estrutura permite organizar um plano que percorra diferentes posições e associe cada leitura dos detectores às condições de aquisição. Os valores de $I_0$ e $I_1$ podem então ser utilizados no cálculo da absorção, conforme a Equação~\ref{eq:absorption-beer-lambert}, e na formação dos mapas utilizados para caracterizar o feixe. Dessa forma, o procedimento de aquisição e as rotinas de análise podem ser desenvolvidos de maneira articulada, preservando a identificação das medidas e os parâmetros necessários à interpretação dos resultados.
 
@@ -596,7 +596,7 @@ A Figura~\ref{fig:abstracao-plano} representa essa sequência para uma varredura
 Dessa forma, podemos entender o plano de cáustica como um plano para modificar o estado da linha a fim de atingir o melhor foco possível.
 O primeiro passo, portanto, é definir quais são os motores de movimentação e quais são os detectores relevantes para sua execução.
 
-Dentro da linha de luz \CNB\ há motores especialmente interessantes para a execução da cáustica. Podemos começar pela movimentação do \texttt{SAMPLE\_STAGE}, que permite posicionar a amostra nos eixos X, Y e Z. A movimentação em Z é especialmente interessante, pois permite aproximar ou afastar a amostra da região de foco do feixe. Dessa forma, é possível realizar medidas em diferentes posições ao longo dessa região e observar como o perfil do feixe varia, como representado na Figura~\ref{fig:sample-stage-foco}.
+Dentro da linha de luz \CNB\ há motores especialmente interessantes para a execução da cáustica. Podemos começar pela movimentação do \texttt{SAMPLE\_STAGE} (traduzido diretamente como \textit{palco da amostra} referenciando ao arranjo de seu controle de posicionamento), que permite posicionar a amostra nos eixos X, Y e Z. A movimentação em Z é especialmente interessante, pois permite aproximar ou afastar a amostra da região de foco do feixe. Dessa forma, é possível realizar medidas em diferentes posições ao longo dessa região e observar como o perfil do feixe varia, como representado na Figura~\ref{fig:sample-stage-foco}.
 
 \begin{figure}[htbp]
     \centering
@@ -624,7 +624,7 @@ Dentro da linha de luz \CNB\ há motores especialmente interessantes para a exec
     \label{fig:sample-stage-foco}
 \end{figure}
 
-Contudo, essa cinemática não é ideal. Uma movimentação em Z provoca também movimentos parasitas em X e em Y, de forma que a região da amostra atingida pelo feixe pode mudar durante o deslocamento. Veja que isso é uma questão importante para a cáustica, pois uma alteração no sinal pode estar associada tanto à variação do perfil do feixe quanto à mudança da região observada na amostra. Dessa forma, é necessário considerar esses movimentos ao comparar as medidas realizadas em diferentes posições.
+Contudo, essa cinemática não é ideal. Uma movimentação em Z provoca também movimentos parasitas em X e em Y, de forma que a região da amostra atingida pelo feixe pode mudar durante o deslocamento. Veja que isso é uma questão importante para a cáustica, pois uma alteração no sinal pode estar associada tanto à variação do perfil do feixe quanto à mudança da região observada na amostra. Dessa forma, é necessário considerar esses movimentos ao comparar as medidas realizadas em diferentes posições e minimizar os efeitos de mudança na região observada.
 
 Para realizar esse ajuste, há um eixo cinemático virtual conhecido como \textit{Beam Axis}. Esse eixo combina uma movimentação grossa de posicionamento em Z com ajustes em X e em Y, de forma que a amostra continue sendo atingida na mesma região. Podemos entender esse eixo como um comando de movimentação que coordena os três eixos físicos do \texttt{SAMPLE\_STAGE}, como ilustrado na Figura~\ref{fig:beam-axis-compensacao}.
 
@@ -668,7 +668,7 @@ Dessa forma, o uso do \textit{Beam Axis} permite organizar a varredura longitudi
 
 
 
-Além da movimentação da amostra, há os motores associados aos espelhos de focalização. Como apresentado na seção "\nameref{sec:linha-de-luz}", o arranjo KB possui um espelho responsável pela focalização vertical e outro pela horizontal \cite{lnlscarnaubaoptica}. Esses espelhos são chamados, respectivamente, de VFM (\textit{Vertical Focusing Mirror}) e HFM (\textit{Horizontal Focusing Mirror}) como já apresentados anteriormente. Seu ajuste é especialmente interessante para a cáustica, pois permite observar como diferentes condições de alinhamento da óptica afetam o feixe na região da amostra.
+Além da movimentação da amostra, há os motores associados aos espelhos de focalização. Como apresentado na seção "\nameref{sec:linha-de-luz}", o arranjo KB possui um espelho responsável pela focalização vertical e outro pela horizontal \cite{lnlscarnaubaoptica}. Esses espelhos são chamados, respectivamente, de VFM (\textit{Vertical Focusing Mirror}) e HFM (\textit{Horizontal Focusing Mirror}) como já apresentados anteriormente. Seu ajuste é especialmente interessante para a cáustica, pois permite observar como diferentes condições provocam deslocamento do perfil longitudinal do feixe.
 
 O VFM possui uma movimentação de rotação em torno do eixo X, chamada de Rx. Essa movimentação pode ser realizada através de dois motores com escalas de ajuste diferentes. O primeiro realiza uma movimentação mais grossa e menos precisa, que será chamada neste trabalho de \textbf{otimização brusca do VFM}. O segundo permite uma movimentação fina e pode ser chamado de \textbf{otimização fina do VFM}, sendo utilizado para realizar ajustes menores na orientação do espelho. Veja que ambos estão associados ao ajuste de Rx do VFM, mas permitem trabalhar em escalas diferentes de movimentação.
 
@@ -767,7 +767,7 @@ Após a representação da borda da amostra, a segunda simplificação considera
 
 Essa limitação exige distinguir a amplitude do campo eletromagnético da intensidade da radiação. A amplitude pode apresentar sinal ou, de maneira mais geral, ser descrita por uma grandeza complexa. A intensidade é proporcional ao módulo quadrado dessa amplitude e, para energia fixa, está relacionada ao fluxo de fótons \cite{openstax_difracao_intensidade}. Assim, uma amplitude com dependência espacial do tipo sinc corresponde a um perfil de intensidade do tipo sinc$^2$, que permanece não negativo.
 
-Após a consulta à literatura, adotou-se a função sinc$^2$ como referência idealizada para o estudo da aproximação. Para um foco coerente e sem aberrações, esse tipo de perfil é descrito na literatura para uma direção de focalização de um sistema KB \cite{osterhoff2019foco}. Isso fornece uma referência física para a modelagem, sem pressupor que todo perfil experimental da linha tenha exatamente essa forma. A Figura~\ref{fig:comparacao-sinc-sinc2} compara as duas funções e evidencia que a sinc$^2$ mantém um máximo central e lóbulos laterais associados à difração, sem as regiões negativas da sinc. Esses máximos secundários serão denominados lóbulos laterais ou franjas de difração.
+Após a consulta à literatura, adotou-se a função sinc$^2$ como referência idealizada para o estudo da aproximação. Para um foco coerente e sem aberrações, esse tipo de perfil é descrito na literatura para uma direção de focalização de um sistema KB \cite{osterhoff2019foco}. Isso fornece uma referência física para a modelagem, sem pressupor que todo perfil experimental da linha tenha exatamente essa forma, na verdade como veremos através da Figura \ref{fig:probe-perfis-feixe} a aproximação pela gaussiana já seria suficiente. A Figura~\ref{fig:comparacao-sinc-sinc2} compara as duas funções e evidencia que a sinc$^2$ mantém um máximo central e lóbulos laterais associados à difração, sem as regiões negativas da sinc. Esses máximos secundários serão denominados lóbulos laterais ou franjas de difração.
 
 \begin{figure}[htbp]
     \centering
@@ -778,7 +778,7 @@ Após a consulta à literatura, adotou-se a função sinc$^2$ como referência i
 
 Para explicitar a convenção matemática, utilizamos a sinc normalizada, definida por $\operatorname{sinc}(u)=\sin(\pi u)/(\pi u)$ para $u\neq 0$ e $\operatorname{sinc}(0)=1$. Um perfil de intensidade de referência em uma direção transversal pode então ser escrito como
 \begin{equation}
-    P_{\mathrm{sinc}^2}(x)=P_{\max}
+    P_{\mathrm{sinc}^2}(x)=P_{\max} \cdot
     \operatorname{sinc}^{2}\!\left(\frac{x-x_c}{a}\right),
     \qquad a>0,
     \label{eq:perfil-feixe-sinc2}
@@ -800,7 +800,7 @@ com $A>0$ e $\sigma>0$. A dedução da relação entre a FWHM e $\sigma$ é apre
     \label{fig:ajuste-gaussiano-sinc2}
 \end{figure}
 
-A imagem da \textit{probe}, que representa a distribuição espacial de intensidade do feixe, também ajuda a justificar essa escolha. Na Figura~\ref{fig:probe-perfis-feixe}, observa-se uma região central de maior intensidade acompanhada de estruturas secundárias compatíveis com franjas de difração. Os cortes horizontal e vertical apresentam um pico principal concentrado e oscilações de menor intensidade fora dele. Esses cortes são perfis obtidos em coordenadas fixas, e não integrais sobre a outra direção. Sua forma sugere o uso de uma gaussiana como aproximação do pico principal no intervalo selecionado, embora existam assimetrias e estruturas que ela não reproduz.
+A imagem da \textit{probe}, que representa a distribuição espacial de intensidade do feixe, também ajuda a justificar essa escolha. Na Figura~\ref{fig:probe-perfis-feixe}, observa-se uma região central de maior intensidade acompanhada de suscintas estruturas secundárias compatíveis com franjas de difração. Os cortes horizontal e vertical apresentam um pico principal concentrado e oscilações de menor intensidade fora dele. Esses cortes são perfis obtidos em coordenadas fixas, e não integrais sobre a outra direção. Sua forma sugere o uso de uma gaussiana como aproximação do pico principal no intervalo selecionado, embora existam assimetrias e estruturas que ela não reproduz.
 
 \begin{figure}[htbp]
     \centering
@@ -975,21 +975,21 @@ No modelo gaussiano da Equação~\ref{eq:modelo-convolucao-amostra-feixe}, a der
 \rotulosecao{sec:otimizacao-foco}{Formulação do processo de otimização}
 \addcontentsline{toc}{subsection}{Formulação do processo de otimização}
 
-A partir desses motores, podemos definir o processo de otimização como uma busca por posições que melhorem os indicadores de foco horizontal e vertical. Para isso, é necessário definir tanto o espaço de movimentação permitido quanto uma maneira de avaliar as imagens obtidas, ou seja, uma métrica associada às imagens. Dentro desse problema o valor de foco será escolhido, contudo podemos definir diferentes maneiras de calcular o foco, de forma que cada métrica apresentará uma busca distinta, como veremos adiante.
+A partir dos motores de otimização brusca e fina do VFM, otimização do HFM e do \texttt{BEAM\_AXIS}, podemos definir o processo de otimização como uma busca por posições que melhorem os indicadores de foco horizontal e vertical. Para isso, é necessário definir tanto o espaço de movimentação permitido quanto uma maneira de avaliar as imagens obtidas, ou seja, uma métrica associada às imagens. Dentro desse problema o valor de foco será escolhido através da FWHM, contudo podemos definir diferentes maneiras de calcular o foco, de forma que cada métrica apresentará uma busca distinta, como veremos adiante.
 
 Podemos representar uma configuração da linha pelo vetor
 \begin{equation}
     \mathbf{q}=(v_b,h,v_f,b),
     \label{eq:configuracao-motores}
 \end{equation}
-no qual $v_b$ é a posição do motor de otimização brusca do VFM, $v_f$ é a posição do motor fino do VFM, $h$ é a posição do motor do HFM e $b$ é a coordenada do \texttt{BEAM\_AXIS}, associada à movimentação longitudinal em Z. Os comandos $v_b$ e $v_f$ atuam sobre Rx do VFM, enquanto $h$ atua sobre Ry do HFM. Essas coordenadas são posições dos motores em suas respectivas unidades.
+no qual $v_b$ é a posição do motor de otimização brusca do VFM, $v_f$ é a posição do motor fino do VFM, $h$ é a posição do motor do HFM e $b$ é a coordenada do \texttt{BEAM\_AXIS}, associada à movimentação longitudinal em Z. Os comandos $v_b$ e $v_f$ atuam sobre Rx do VFM, enquanto $h$ atua sobre Ry do HFM e \texttt{BEAM\_AXIS} atua sobre o eixo longitudinal da linha. Essas coordenadas são posições dos motores em suas respectivas unidades.
 
 Para cada coordenada $i\in\{1,2,3,4\}$, definimos um intervalo de posições permitido:
 \begin{equation}
     D_i=[\ell_i,u_i], \qquad \ell_i<u_i.
     \label{eq:limites-motores}
 \end{equation}
-Adotamos $D_1=D_{v_b}$, $D_2=D_h$, $D_3=D_{v_f}$ e $D_4=D_b$, seguindo a ordem de otimização. Os valores de $\ell_i$ e $u_i$ devem ser definidos a partir dos limites operacionais e da região escolhida para o experimento. Esses valores ficam como parâmetros da formulação, pois ainda precisam ser estabelecidos para a execução do método e também podem variar conforme o tempo e mudanças da linha. O conjunto de configurações válidas é então dado por
+Adotamos $D_1=D_{v_b}$, $D_2=D_h$, $D_3=D_{v_f}$ e $D_4=D_b$, seguindo a ordem de otimização adotadas durante uma execução manual da otimização. Os valores de $\ell_i$ e $u_i$ devem ser definidos a partir dos limites operacionais e da região escolhida para o experimento. Esses valores ficam como parâmetros da formulação, pois ainda precisam ser estabelecidos para a execução do método e também podem variar conforme o tempo e mudanças da linha. O conjunto de configurações válidas é então dado por
 \begin{equation}
     \Omega=\{\mathbf{q}\in D_1\times D_2\times D_3\times D_4:
     \mathbf{q}\ \text{é operacionalmente admissível}\}.
@@ -997,13 +997,13 @@ Adotamos $D_1=D_{v_b}$, $D_2=D_h$, $D_3=D_{v_f}$ e $D_4=D_b$, seguindo a ordem d
 \end{equation}
 Essa condição adicional permite considerar restrições que envolvam mais de um motor. No caso do \texttt{BEAM\_AXIS}, por exemplo, uma posição somente é válida se as compensações solicitadas em X e Y também respeitarem os limites dos eixos físicos. Na execução, as posições escolhidas devem ainda respeitar a resolução de comando de cada motor.
 
-Para uma configuração $\mathbf{q}\in\Omega$, seja $I_{\mathbf{q}}$ a imagem adquirida. Podemos representar sua avaliação por uma função de caixa preta, em que \textbf{c} representa outras condições da linha de luz que podem ou não afetar a otimização do foco, mas não são objeto de estudo dentro desse trabalho:
+Para uma configuração $\mathbf{q}\in\Omega$, seja $I_{\mathbf{q}}$ a imagem adquirida. Podemos representar sua avaliação por uma função de caixa preta, em que \textbf{c} representa outras condições da linha de luz que podem ou não afetar a otimização do foco e a relevância desses outros parâmetros pode ser estudada em outros trabalhos, mas não são objeto de estudo dentro desse trabalho:
 \begin{equation}
     \mathcal{B}(I_{\mathbf{q}};\mathbf{q},\mathbf{c})
     =\bigl(F_H(\mathbf{q}),F_V(\mathbf{q})\bigr),
     \label{eq:caixa-preta-foco}
 \end{equation}
-$\mathbf{c}$ reúne as condições de aquisição e calibração, como energia, tempo de integração e escala espacial da imagem. As saídas $F_H$ e $F_V$ são medidas que caracterizam, respectivamente, o foco horizontal e vertical, conforme o método de análise adotado. A Figura~\ref{fig:caixa-preta-foco} apresenta essa organização.
+$\mathbf{c}$ reúne as condições de aquisição e calibração, como energia, tempo de integração e escala espacial da imagem. As saídas $F_H$ e $F_V$ são medidas que caracterizam, respectivamente, o foco horizontal e vertical, conforme o método de análise adotado, mas podem haver métricas que retornem vários valores ou até mesmo uma única métrica. A Figura~\ref{fig:caixa-preta-foco} apresenta a organização adotada nesse projeto.
 
 \begin{figure}[htbp]
     \centering
@@ -1041,7 +1041,7 @@ Por exemplo, quando $F_H$ e $F_V$ representam larguras que se deseja reduzir, um
     \qquad 0<\alpha<1,
     \label{eq:objetivo-foco}
 \end{equation}
-na qual $s_H>0$ e $s_V>0$ são referências fixas nas unidades das respectivas larguras ,que atuam como normalização, e $\alpha$ define a importância relativa das duas direções. Essa expressão exemplifica uma escolha para $\Phi$, sem estabelecer que esse foi o critério utilizado no trabalho.
+na qual $s_H>0$ e $s_V>0$ são referências fixas nas unidades das respectivas larguras ,que atuam como normalização, e $\alpha$ define a importância relativa das duas direções. 
 
 Uma formulação geral do problema seria procurar um mínimo global:
 \begin{equation}
@@ -1075,7 +1075,7 @@ com $D_1=D_{v_b}$, $D_2=D_h$, $D_3=D_{v_f}$ e $D_4=D_b$, veja que a formulação
     \qquad k=1,2,3,4.
     \label{eq:atualizacao-gulosa}
 \end{equation}
-Nessas expressões, $J$ representa o critério de comparação adotado, e sua avaliação depende da imagem adquirida em cada configuração. A minimização é realizada entre as posições avaliadas em $C_k$, sem pressupor uma busca exata em todo o intervalo do motor. A sequência de configurações fica, portanto,
+Nessas expressões, $J$ representa o critério de comparação adotado, e sua avaliação depende da imagem adquirida em cada configuração. A minimização é realizada entre as posições avaliadas em $C_k$, sem pressupor uma busca exata em todo o intervalo do motor, além disso o parâmetro $\bigl(t-q_{i_k}^{(k-1)}\bigr)$ define o passo de atualização da coordenada $i_k$. A sequência de configurações fica, portanto,
 \begin{equation}
     \mathbf{q}^{(0)}
     \xrightarrow{\text{VFM brusco}}\mathbf{q}^{(1)}
@@ -1085,8 +1085,62 @@ Nessas expressões, $J$ representa o critério de comparação adotado, e sua av
     \label{eq:sequencia-gulosa}
 \end{equation}
 
+Para visualizar a busca por direções, a Figura~\ref{fig:busca-direcao-hfm} representa uma seção bidimensional do espaço de configurações, mantendo $v_f$ e $b$ fixos. O eixo horizontal corresponde ao comando $h$ do HFM, enquanto o vertical corresponde a $v_b$ do VFM brusco. Ao variar apenas o HFM, percorremos uma reta paralela ao eixo $h$, cuja direção no espaço completo é $\mathbf{e}_2=(0,1,0,0)$. A posição selecionada minimiza o critério entre os candidatos dessa reta, conforme a Equação~\ref{eq:selecao-gulosa}. As curvas de nível representam valores constantes de $J$ no espaço dos motores, e não no plano das larguras $(F_H,F_V)$.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[x=1.25cm,y=1.25cm,>=stealth,font=\small]
+        \begin{scope}
+            \clip (-3.4,-2.5) rectangle (4,2.7);
+            \foreach \r in {0.55,1.1,1.65,2.2} {
+                \draw[blue!55] plot[domain=0:360,samples=100,smooth,variable=\t]
+                    ({\r*(cos(\t)+sin(\t))},{\r*sin(\t)});
+            }
+            \draw[orange!85!black,dashed,thick] (-3.4,1.5) -- (4,1.5);
+        \end{scope}
+        \draw[->] (-3.4,-2.5) -- (4.2,-2.5) node[right] {$h$ (HFM)};
+        \draw[->] (-3.4,-2.5) -- (-3.4,2.9) node[above] {$v_b$ (VFM brusco)};
+        \fill (0,0) circle (1.8pt) node[below right] {$\mathbf{q}^{*}$};
+        \fill (3.2,1.5) circle (2pt) node[above] {início};
+        \fill[orange!85!black] (1.5,1.5) circle (2.4pt) node[above left] {melhor posição na reta};
+        \draw[->,very thick,orange!85!black] (3.2,1.5) -- (1.5,1.5);
+        \node[below,fill=white,inner sep=2pt] at (2.7,1.45) {direção do HFM};
+        \node[align=center] at (0,-3.15) {Curvas de nível de $J$; custo menor nas curvas internas.};
+    \end{tikzpicture}
+    \caption{Esboço de uma busca unidimensional ao variar o HFM e manter os demais motores fixos. A reta tracejada contém as configurações acessíveis nessa etapa. Mesmo o mínimo exato nessa reta pode estar afastado do mínimo da função na seção considerada. As coordenadas são normalizadas e as curvas são ilustrativas, sem representar uma resposta medida da linha. Elaboração própria.}
+    \label{fig:busca-direcao-hfm}
+\end{figure}
+
+A Figura~\ref{fig:passagem-direcoes-sem-minimo} explicita por que uma passagem sequencial não necessariamente atinge um mínimo. No exemplo idealizado, o custo é $J(x,y)=(x-y)^2+y^2$, com $x$ e $y$ representando desvios normalizados dos comandos do HFM e do VFM brusco, respectivamente. Partindo de $A=(3,2)$, a minimização exata em $x$ leva a $B=(2,2)$. Em seguida, a minimização exata em $y$ leva a $C=(2,1)$. Embora cada etapa minimize o custo ao longo de sua reta, em $C$ ainda é possível reduzir $J$ alterando novamente $x$, até $D=(1,1)$. Portanto, $C$ não é sequer um mínimo local dessa função, cujo mínimo global está em $(0,0)$. O exemplo mantém o mesmo critério nas duas etapas e isola o efeito do acoplamento entre os comandos; na aplicação, a amostragem finita e a escolha de critérios diferentes por etapa também devem ser consideradas.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[x=1.25cm,y=1.25cm,>=stealth,font=\small]
+        \begin{scope}
+            \clip (-3.4,-2.5) rectangle (4,2.8);
+            \foreach \r in {0.55,1.1,1.65,2.2} {
+                \draw[blue!55] plot[domain=0:360,samples=100,smooth,variable=\t]
+                    ({\r*(cos(\t)+sin(\t))},{\r*sin(\t)});
+            }
+        \end{scope}
+        \draw[->] (-3.4,-2.5) -- (4.2,-2.5) node[right] {$x$ (HFM)};
+        \draw[->] (-3.4,-2.5) -- (-3.4,3) node[above] {$y$ (VFM brusco)};
+        \draw[->,very thick,orange!85!black] (3,2) -- (2,2);
+        \draw[->,very thick,orange!85!black] (2,2) -- (2,1);
+        \draw[->,very thick,dashed,red!75!black] (2,1) -- (1,1);
+        \fill (3,2) circle (2pt) node[above right] {$A$};
+        \fill (2,2) circle (2pt) node[above left] {$B$};
+        \fill[orange!85!black] (2,1) circle (2.4pt) node[right] {$C$: fim da passagem};
+        \fill[red!75!black] (1,1) circle (2pt) node[above left] {$D$};
+        \fill (0,0) circle (2pt) node[below right] {mínimo global};
+        \node[align=center] at (0,-3.15) {A seta tracejada indica uma redução adicional possível de $J$.};
+    \end{tikzpicture}
+    \caption{Contraexemplo ilustrativo: uma passagem pelas duas direções, mesmo com minimizações exatas em cada reta, termina em $C$, que não é um mínimo local. A atualização do segundo motor altera a melhor posição do primeiro. O percurso demonstra a limitação de uma única passagem, sem reproduzir a ordem operacional dos quatro eixos. Elaboração própria.}
+    \label{fig:passagem-direcoes-sem-minimo}
+\end{figure}
+
 Veja que cada etapa utiliza o resultado da anterior e altera apenas uma coordenada de comando. No caso do \texttt{BEAM\_AXIS}, isso inclui as compensações físicas em X e Y associadas ao eixo virtual. Essa organização permite realizar a otimização de forma sequencial, mas seu resultado depende da configuração inicial, das posições avaliadas e da ordem escolhida. Como os efeitos dos motores podem estar acoplados, uma única passagem por essa sequência não garante um mínimo global, nem um mínimo local em relação às quatro coordenadas simultaneamente. A configuração $\mathbf{q}^{(4)}$ representa a condição selecionada ao final do procedimento realizado e como demonstrado empiricamente nesse trabalho poderá ser visto que é uma condição suficiente de trabalho.
-Um posterior estudo pode indicar métodos de como trafegar por esse espaço \Omega\ de forma que será possível encontrar um mínimo global.
+Um posterior estudo pode indicar métodos de como trafegar por esse espaço \Omega\ de forma que será possível encontrar um mínimo global ou mínimos locais para uma caracterização da região de busca. Além disso, podem ser testados algoritmos de otimização mais sofisticados.
 
 No estado atual do estudo é inviável encontrar a resolução para o problema geral, de forma que há uma falta de recursos (principalmente tempo).
 Veja que o estudo inicialmente teria que classificar e validar os espaços de busca, assim como teria de haver um estudo para possíveis candidatos a $J$ e toda essa amostragem está sujeito a tempo da linha de luz, que é concorrido e possui outras prioridades.
@@ -1127,7 +1181,7 @@ A interpretação mais simples dessa métrica $J$ é encontrar, entre os pontos 
     \label{fig:melhor-ponto-foco}
 \end{figure}
 
-Para pesos ou referências diferentes, a proximidade deve ser entendida na escala definida pela função objetivo: as curvas de mesmo custo passam a ser elípticas no plano das larguras, conforme discutido a seguir.
+Para pesos ou referências diferentes, a proximidade deve ser entendida na escala definida pela função objetivo: as curvas de custos distintos passam a ser elípticas no plano das larguras, conforme discutido a seguir.
 
 Para a função $J_{\mathrm{ex}}$ da Equação~\ref{eq:objetivo-foco}, uma curva de nível $J_{\mathrm{ex}}=c$, com $c>0$, pode ser escrita como
 \begin{equation}
@@ -1316,7 +1370,7 @@ Em conjunto com a análise das imagens, esse desenvolvimento possibilitou avalia
 \rotulosecao{sec:resultados-causticas-manuais}{Comportamento das cáusticas manuais}
 \addcontentsline{toc}{subsection}{Comportamento das cáusticas manuais}
 
-Para visualizar a evolução das larguras, foram construídos gráficos nos planos \texttt{BEAM\_AXIS} versus $F_H$ e \texttt{BEAM\_AXIS} versus $F_V$. Os pontos representam as FWHM extraídas das imagens, e as curvas tracejadas representam os ajustes utilizados para descrever sua tendência. Os três conjuntos selecionados são identificados nos gráficos como \texttt{20260123\_ANT1}, \texttt{20260129\_ANT1} e \texttt{20260805\_ANT1}.
+Para visualizar a evolução das larguras, foram construídos gráficos nos planos \texttt{BEAM\_AXIS} $\times$ $F_H$ e \texttt{BEAM\_AXIS} $\times$ $F_V$. Os pontos representam as FWHM extraídas das imagens, e as curvas tracejadas representam os ajustes utilizados para descrever sua tendência. Os três conjuntos selecionados são identificados nos gráficos como \texttt{20260123\_ANT1}, \texttt{20260129\_ANT1} e \texttt{20260805\_ANT1}.
 
 Os ajustes quadráticos foram adotados como aproximações locais próximas ao foco. No modelo de propagação gaussiana, o quadrado da largura é quadrático em relação à distância ao foco; a FWHM tem dependência do tipo raiz quadrada, mas admite aproximação parabólica perto do mínimo \cite{osterhoff2019foco}. A interpretação dos ajustes depende, portanto, da região amostrada e da dispersão dos pontos.
 
@@ -1331,7 +1385,7 @@ Os ajustes quadráticos foram adotados como aproximações locais próximas ao f
     \label{fig:resultado-caustica-20260123}
 \end{figure}
 
-\noindent\textbf{Dispersão dos pontos e cruzamento das curvas.} O conjunto \texttt{20260129\_ANT1}, apresentado na Figura~\ref{fig:resultado-caustica-20260129}, mostra uma dispersão acentuada, inclusive entre medidas realizadas em posições semelhantes do eixo longitudinal. Uma hipótese é que outros parâmetros da linha tenham sido alterados durante os ajustes manuais que são difíceis de serem rastreados. Entretanto, outra hipótese que será mais discutida adiante é relativo à \textit{probe} associada a uma \textbf{PSF} (\textit{Point-Spread Function}).
+\noindent\textbf{Dispersão dos pontos e cruzamento das curvas.} O conjunto \texttt{20260129\_ANT1}, apresentado na Figura~\ref{fig:resultado-caustica-20260129}, mostra uma dispersão acentuada, inclusive entre medidas realizadas em posições semelhantes do eixo longitudinal. Uma hipótese é que outros parâmetros da linha tenham sido alterados durante os ajustes manuais que são difíceis de serem rastreados sem um procedimento padrão, visto que vários parâmetros da linha são variados durante uma cáustica manual. Entretanto, outra hipótese que será mais discutida adiante é relativo à \textit{probe} associada a uma \textbf{PSF} (\textit{Point-Spread Function}).
 
 Nesse conjunto, as curvas ajustadas se cruzam, indicando uma posição em que $F_H\approx F_V$. Esse encontro não estabelece a coincidência dos planos focais: o mínimo horizontal está no intervalo mostrado, enquanto a curva vertical permanece decrescente até seu limite. Assim, a posição do mínimo vertical não é determinada de forma confiável apenas por essas medidas, e uma estimativa de $\Delta z_{\mathrm{ast}}$ dependeria de ampliar a varredura. O cruzamento representa equilíbrio das larguras em um plano, representando uma zona que minimiza o astigmatismo sobre esses planos focais.
 
@@ -1357,11 +1411,7 @@ Nesse conjunto, as curvas ajustadas se cruzam, indicando uma posição em que $F
 
 Em conjunto, esses resultados permitem observar as distinções discutidas na formulação teórica: proximidade dos mínimos com larguras diferentes, igualdade das larguras fora dos mínimos e dispersão que dificulta interpretar uma cáustica como a resposta de uma única condição óptica. Eles também justificam organizar a aquisição de modo sistemático, mantendo os ajustes dos espelhos e as demais condições relevantes durante cada varredura e registrando suas alterações. O plano desenvolvido oferece a estrutura para esse controle e registro, favorecendo resultados mais reproduzíveis e interpretáveis; a quantificação desse ganho exige comparar aquisições realizadas sob condições controladas.
 
-\clearpage
 
-
-
-\newpage
 \subsection*{Estabilidade do foco ao longo de 24 horas}
 \rotulosecao{sec:resultados-estabilidade-24h}{Estabilidade do foco ao longo de 24 horas}
 \addcontentsline{toc}{subsection}{Estabilidade do foco ao longo de 24 horas}
@@ -1423,7 +1473,6 @@ Os registros do encoder nas direções horizontal, vertical e longitudinal (\tex
     \end{tabular}
 \end{table}
 
-\clearpage
 \subsection*{Movimento relativo, probe e PSF efetiva}
 \addcontentsline{toc}{subsection}{Movimento relativo, probe e PSF efetiva}
 
@@ -1630,6 +1679,8 @@ No painel à direita da Figura~\ref{fig:hfm-calibracao-ry}, cada ponto relaciona
 %%\rotulosecao{sec:discussao}{Discussão}
 %%\addcontentsline{toc}{section}{Discussão}
 
+\clearpage
+\newpage
 \phantomsection
 \section*{Conclusão}
 \rotulosecao{sec:conclusao}{Conclusão}
